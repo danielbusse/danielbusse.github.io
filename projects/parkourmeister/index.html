@@ -6,7 +6,7 @@
         <meta name="description" content="Portfolio of Daniel Busse">
         <meta name="author" content="Daniel Busse">
 
-        <title>Daniel Busse | Contact</title>
+        <title>Daniel Busse | Parkourmeister</title>
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" 
         integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" 
@@ -33,30 +33,123 @@
                             <li class="nav-item p-1">
                                 <a class="nav-link text-light fw-bold active" aria-current="page" href="https://danielbusse.github.io/projects/">Projects</a>
                             </li>
-                            <li class="nav-item p-1">
-                                <a class="nav-link text-light" href="https://danielbusse.github.io/contact/">Contact</a>
-                            </li>
                         </ul>
                     </div>
                 </nav>
             </header>
-            <main class="d-flex px-3 h-100 flex-grow-1 align-items-center">
-                <div class="container d-flex flex-column">
-                    <h1>Parkourmeiser - This Page is currently edited</h1>
-                    <p class="lead">
+            <main class="d-flex px-3 flex-grow-1 align-items-center">
+                <div class="container d-flex flex-column w-75 text-start">
+                    <h1 class="text-center p-5">Parkourmeiser - my first robotics project</h1>
+                    <p class="lead p-2 font-monospace">
                         This project emerged out of the Software Engineering I course of my bachelor. This project has two parts, "Parkourmeister" and "Ronaldo". 
                         Latter will not be covered here but can be found under <a href="https://danielbusse.github.io/projects/" class="text-info">projects</a>.
                     </p>
-                    <p>
+                    <p class="p-2">
                         The Task was to develop an algorithm to traverse the NIBO 2 through a labyrinth-like parcour with deadends and very slim sections. The 
                         Goal was to reach the exit, wich was an opening to an open area.
                     </p>
-                    <p>
+                    <p class="p-2">
                         To sense the environment, the NIBO 2 is equiped with multiple sensors as can be seen in the following image. It has 5 IR-Sensors in his 
-                        frontsection facing left, right, front and diagonally to the front and each side. There are also Floorsensors that sense, if there is a 
+                        frontsection facing left, right, front and diagonally to the front and each side. There are also floorsensors that sense, if there is a 
                         floor beneath these sensors. Besides these there are also linesensors, with were not used in this project.
                     </p>
-                    <img src="https://danielbusse.github.io/img/nibo_sensors.png" class="mx-auto d-block img-fluid" alt="Sensorlayout of the NIBO 2 robot">
+                    <img src="https://danielbusse.github.io/img/nibo_sensors.png" class="mx-auto d-block img-fluid p-4" alt="Sensorlayout of the NIBO 2 robot">
+                    <p class="p-2">
+                        The Algorithm to traverse the parcour was a simple state machine that acted depending on his sensor input. Dependent on the current state 
+                        and its sensors the robot will switch the state to another one or stay in the same state. These states shape the behavior of the robot.
+                    </p>
+                    <p class="p-2">
+                        The floorsensors would stop the robot imidiately and set it into the stop-state if they triggered. This is neccessary to prevent the robot 
+                        from falling of an edge. Besides that they acted as a detector that checks if a direction in front of the robot is blocked.
+                        <br>
+                        The IR sensors are used to sense walls and their proximity to the robot. There were two thresholds to seperate the detected data into 3 states: 
+                        clear, close, blocked. 
+                    </p>
+                    <p>
+                        The state-logic is vaguely summarized in the following table:
+                        <table class="table table-dark table-striped table-hover">
+                            <thead>
+                                <tr><td>State</td><td>Input</td><td>Next State</td></tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>STOP</td>
+                                    <td>no floor right or walls right</td>
+                                    <td>TURN LEFT</td>
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <td>all sensors clear</td>
+                                    <td>MOVE FORWARD</td></tr>
+                                <tr>
+                                    <td></td>
+                                    <td>no floor left or walls left</td>
+                                    <td>TURN RIGHT</td></tr>
+                                <tr>
+                                    <td></td>
+                                    <td>has walls both sides and front or no floor</td>
+                                    <td>DEAD END</td></tr>
+                                <tr>
+                                    <td>MOVE FORWARD</td>
+                                    <td>wall front or no floor to either or both sides</td>
+                                    <td>STOP</td></tr>
+                                <tr>
+                                    <td></td>
+                                    <td>wall diagonally right</td>
+                                    <td>MOVE LEFT</td></tr>
+                                <tr>
+                                    <td></td>
+                                    <td>wall diagonally right</td>
+                                    <td>MOVE RIGHT</td></tr>
+                                <tr>
+                                    <td>MOVE LEFT</td>
+                                    <td>wall front or diagonally left</td>
+                                    <td>STOP</td></tr>
+                                <tr>
+                                    <td></td>
+                                    <td>all sensors clear</td>
+                                    <td>MOVE FORWARD</td></tr>
+                                <tr>
+                                    <td>MOVE RIGHT</td>
+                                    <td>wall front or diagonally right</td>
+                                    <td>STOP</td></tr>
+                                <tr>
+                                    <td></td>
+                                    <td>all sensors clear</td>
+                                    <td>MOVE FORWARD</td></tr>
+                                <tr>
+                                    <td>TURN LEFT</td>
+                                    <td>wall front or to the left</td>
+                                    <td>STOP</td></tr>
+                                <tr>
+                                    <td></td>
+                                    <td>all sensors clear</td>
+                                    <td>MOVE FORWARD</td></tr>
+                                <tr>
+                                    <td>TURN RIGHT</td>
+                                    <td>wall front or to the right</td>
+                                    <td>STOP</td></tr>
+                                <tr>
+                                    <td></td>
+                                    <td>all sensors clear</td>
+                                    <td>MOVE FORWARD</td></tr>
+                                <tr>
+                                    <td>DEAD END</td>
+                                    <td>left side clear</td>
+                                    <td>TURN LEFT</td></tr>
+                                <tr>
+                                    <td></td>
+                                    <td>right side clear</td>
+                                    <td>TURN RIGHT</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </p>
+                    <p class="p-2">
+                        Algorithmicly the robot prefers stopping over left turns over straights over right turns over backwards. This way it may solve any labyrinth mithout loops. 
+                        If there is a loop present in the labyrinth the robot may get trapped in this loop. But since the parcour to solve would not contain these, we 
+                        did not have to solve this problem to complete the course.
+                    </p>                    
                 </div>
             </main>
             <footer class="mt-auto text-white-50">
