@@ -18,7 +18,7 @@
         </style>
     </head>
     <body class="d-flex text-center text-bg-success mb-auto">
-        <div class="container d-flex flex-column w-100 p-3">
+        <div class="container d-flex flex-column p-3">
             <header class="container">
                 <nav class="navbar navbar-expand-sm">
                     <div class="container-fluid">
@@ -39,9 +39,39 @@
             </header>
             <main class="d-flex px-3 flex-grow-1 align-items-center">
                 <div class="container d-flex flex-column">
-                    <h1>NaoLino</h1>
-                    <p class="lead">I still have to write text here :(</p>
+                    <h1 class="text-center p-5">NaoLino - Detecting Objects</h1>
+                    <p class="lead p-2 font-monospace">
+                        This project emerged out of the Software Engineering II course of my Bachelor. Here we had to develop an algorithm for a task of choice 
+                        to implement on the Nao robot. This Project is still (as of 2024) featured on the iCampus website of my university. You can find it 
+                        <a href="https://icampus.th-wildau.de/cms/roboticlab/studierendenprojekte" class="text-info">here</a>.
                     </p>
+                    <p class="p-2">
+                        My project partner and me chose to double down on the field of image recognition and wanted to implement an algorithm to detect objects. 
+                        Our Goal was to detect multiple diffent objects with different techniques.
+                    </p>
+                    <p class="p-2">
+                        .
+                    </p>
+                    <img src="https://danielbusse.github.io/img/lock_template.jpg" class="mx-auto d-block img-fluid p-4" alt="Template of the Lock for template maching">
+                    <img src="https://danielbusse.github.io/img/lock_template_detected.jpg" class="mx-auto d-block img-fluid p-4" alt="Lock detected by template maching">
+                    <p class="p-2">
+                        The result of the project is mixed. We did get template maching to work easy and relativley reliable. However, we were not be able to train the 
+                        cascade classifier to detect objects reliably. The results where ambigous and were higly dependent on luck to detect an object correctly. This was 
+                        due to our lack of experience in the training process. We had not collected enough Data and only used our personal hardware to train the classifer. 
+                    </p>
+                    <p>
+                        We were able to detect objects because we used multiple techniques. We consider this project still a success because we have learned a lot not only 
+                        about object detection but also on how to approach a unknown and difficult topic. If you are interested in the results you can find a small recorded snippet of the presentation below.
+                    </p>
+                    <iframe width="560" height="315" src="https://www.youtube-nocookie.com/embed/J_lsKlnu7mg?si=mWkvYRX2Q44YdHAU" title="YouTube video player" frameborder="0" 
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" 
+                        allowfullscreen></iframe>
+                    <iframe width="560" height="315" src="https://www.youtube.com/embed/J_lsKlnu7mg?si=Ff8FguC4XDqQgb_p" title="YouTube video player" frameborder="0" 
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" 
+                        allowfullscreen></iframe>
+                </div>
+                <div class="container d-flex flex-column w-75 text-start"></div>
+                                      
                 </div>
             </main>
             <footer class="mt-auto text-white-50">
