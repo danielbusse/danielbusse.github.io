@@ -38,7 +38,7 @@
                 </nav>
             </header>
             <main class="d-flex px-3 flex-grow-1 align-items-center">
-                <div class="container d-flex flex-column w-75">
+                <div class="container d-flex flex-column w-75 text-start">
                     <h1 class="text-center p-5">NaoLino - Detecting Objects</h1>
                     <p class="lead p-2 font-monospace">
                         This project emerged out of the Software Engineering II course of my Bachelor. Here we had to develop an algorithm for a task of choice 
@@ -50,6 +50,7 @@
                         Our Goal was to detect multiple diffent objects with different techniques. The first was template maching and the second a cascade classifier.
                         We tried to detect three objects. The lock of the container the robot was stored in, an apple and a banana.
                     </p>
+                    <img src="https://danielbusse.github.io/img/nao.jpg" class="mx-auto d-block img-fluid p-4" alt="The Nao we used, called Marvin">
                     <p class="p-2">
                         We tried to detect the lock by using template matching from opencv. This is a technique were you try to find a template in an image by moving it over the 
                         image and find spots that match the template. You can see the template and a result of the matching below.
@@ -74,9 +75,11 @@
                     </p>
                     <p class="p-1 fst-italic">(The video was cut a little weird by iCampus, but the detection of the apple was successful int he second try, after the cut. You can 
                         hardly hear the Nao say "Apfel habe ich links gefunden.")</p>
-                    <iframe width="560" height="315" src="https://www.youtube-nocookie.com/embed/J_lsKlnu7mg?si=mWkvYRX2Q44YdHAU" title="YouTube video player" frameborder="0" 
+                    <div class="items-align-center">
+                        <iframe width="560" height="315" src="https://www.youtube-nocookie.com/embed/J_lsKlnu7mg?si=mWkvYRX2Q44YdHAU" title="YouTube video player" frameborder="0" 
                         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" 
                         allowfullscreen></iframe>
+                    </div>
                 </div>
             </main>
             <footer class="mt-auto text-white-50">
