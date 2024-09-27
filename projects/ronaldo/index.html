@@ -42,15 +42,15 @@
                     <h1 class="text-center p-5">Ronaldo - My First Image Recognition Project</h1>
                     <p class="lead font-monospace">The Ronaldo project is the second part of the <a href="https://danielbusse.github.io/projects/parkourmeister/" class="text-info">Parkourmeister</a> 
                         project. The task was to detect a red ball and navigate the robot to kick it by driving into it. My project partner and I chose this task ourselves, 
-                        because we were intersted in the topic of image recognition.</p>
+                        because we were interested in the topic of image recognition.</p>
                     </p>
                     <p class="p-2">
-                        For this project we used a modified nibo2 robot with additional features as displayed in the image below. The nibo was equipped with an extra 
+                        For this project we used a modified Nibo2 robot with additional features as displayed in the image below. The Nibo was equipped with an extra 
                         layer on top of his construction that housed a Raspberry Pi 1 Model B and a cheap webcam. The Communication between both devices would be 
-                        established over a XBEE Module. The Master was on the raspberry and the Client on the nibo. This was due to the Raspberry beeing the decision 
+                        established over an XBEE Module. The Master was on the Raspberry and the Client on the nibo. This was due to the Raspberry being the decision 
                         maker and the nibo just following instructions.
                     </p>
-                    <img src="https://danielbusse.github.io/img/modified_nibo2.png" class="mx-auto d-block img-fluid p-4" alt="shematic of the modified nibo robot">
+                    <img src="https://danielbusse.github.io/img/modified_nibo2.png" class="mx-auto d-block img-fluid p-4" alt="schematic of the modified nibo robot">
                     <p>
                         The detection of the ball was done by converting the colorspace of the image to hsv and matting the pixels in certain ranges to end up with red 
                         pixels only. With only red pixels apparent the image was searched for circles. For this the OpenCV functions cvCvtColor, cvInRange and cvHoughCircles 
@@ -58,13 +58,13 @@
                     </p>
                     <img src="https://danielbusse.github.io/img/ball_detection_thresholds.jpg" class="mx-auto d-block img-fluid p-4" alt="visualization of the detection and threshold setting">
                     <p>
-                        The movement pattern of the nibo consited of different States. First was the searching state where no ball could be detected. If a ball was found 
-                        but not positioned well the nibo would get into the approach state. If a ball was detected and positioned well the nibo would go into the shooting state.
+                        The movement pattern of the Nibo consited of different States. First was the searching state where no ball could be detected. If a ball was found 
+                        but not positioned well the Nibo would get into the approach state. If a ball was detected and positioned well the Nibo would go into the shooting state.
                         The Raspberry would determine these states by thresholds on the balls position in frame. Then it would communicate a state switch over XBEE.
                     </p>
                     <P>
-                        In the search state the nibo would rotate around itself to get a 360 ° look. This would happen indefenetly if no ball can be found. The approach 
-                        state based on data provided by the rasberry. Depending on this data the nibo would change its relative rotation and position to the ball. The 
+                        In the search state the Nibo would rotate around itself to get a 360 ° look. This would happen indefinitely if no ball can be found. The approach 
+                        state based on data provided by the Raspberry. Depending on this data the nibo would change its relative rotation and position to the ball. The 
                         goal would be to get the ball in a good position for shooting. In the shooting state the nibo would approach the ball with high speed (for a nibo)
                         until he hits the ball.
                     </P>
@@ -76,7 +76,7 @@
             </main>
             <footer class="mt-auto text-white-50">
                 <p>
-                    Peronal website of Daniel Busse<br>
+                    Personal website of Daniel Busse<br>
                     © 2024 Daniel Busse
                 </p>
             </footer>
