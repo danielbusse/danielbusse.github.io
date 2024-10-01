@@ -54,7 +54,7 @@
                         established over an XBEE Module. The Master was on the Raspberry and the Client on the nibo. This was due to the Raspberry being the decision 
                         maker and the nibo just following instructions.
                     </p>
-                    <img src="https://danielbusse.github.io/img/modified_nibo2.png" class="mx-auto d-block img-fluid p-4" alt="schematic of the modified nibo robot">
+                    <img src="https://danielbusse.github.io/img/modified_nibo2.png" class="mx-auto d-block img-fluid p-4 bg-light" alt="schematic of the modified nibo robot">
                     <p class="p-2 text-block">
                         The detection of the ball was done by converting the colorspace of the image to hsv and matting the pixels in certain ranges to end up with red 
                         pixels only. With only red pixels apparent the image was searched for circles. For this the OpenCV functions cvCvtColor, cvInRange and cvHoughCircles 
