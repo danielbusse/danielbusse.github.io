@@ -1,95 +1,98 @@
-import Image from "next/image";
-import styles from "./page.module.css";
+'use client';
 
-export default function Home() {
+import { motion } from 'framer-motion';
+import { useTransitionRouter } from "next-view-transitions";
+import ReactLenis from '@studio-freight/react-lenis';
+import { usePathname } from "next/navigation";
+
+import styles from './home.module.scss';
+
+import { useRef } from 'react';
+import { useGSAP } from '@gsap/react';
+import gsap from 'gsap';
+import { SplitText } from 'gsap/all';
+
+gsap.registerPlugin(SplitText)
+
+export default function HomePage() {
+
+  const container = useRef<HTMLElement | null>(null);
+  const router = useTransitionRouter();
+  const links = ["/", "/about", "/projects", "/contact"];
+  const currentPath = usePathname();
+
+  useGSAP(() => {
+    let split = SplitText.create("#fancytitle", { type: "words, chars" });
+    const tl = gsap.timeline();
+    tl.add("bluespin", 1)
+      .from(split.words, { duration: 1, y: 100, autoAlpha: 0, stagger: 0.4}, 0.2)
+      .from("#signature", { duration: 1, y: 100, autoAlpha: 0}, 2)
+      .from("#projects-button", { duration: 1, y: 100, autoAlpha: 0}, 4)
+      .fromTo("#projects-shimmer", {x: 350, rotation: 30}, {x:0, rotation: 30}, 4.5)
+      .from("#github-button", { duration: 1, y: 100, autoAlpha: 0}, 5)
+      .fromTo("#github-shimmer", {x: 350, rotation: 30}, {x:0, rotation: 30}, 5.5);
+  })
+
+  /**
+     * For site transitions
+     */
+
+    function slideInOut() {
+        document.documentElement.animate(
+            [
+                {
+                    opacity: 1,
+                    transform: "translateY(0)",
+                },
+                {
+                    opacity: 0.2,
+                    transform: "translateY(-35%)",
+                }
+            ], {
+                duration: 1500,
+                easing: "cubic-bezier(0.87, 0, 0.13, 1)",
+                fill: "forwards",
+                pseudoElement: "::view-transition-old(root)",
+        });
+
+        document.documentElement.animate(
+            [
+                {
+                    clipPath: "polygon(0% 100%, 100% 100%, 100% 100%, 0% 100%)",
+                },
+                {
+                    clipPath: "polygon(0% 100%, 100% 100%, 100% 0%, 0% 0%)",
+                }
+            ], {
+                duration: 1500,
+                easing: "cubic-bezier(0.87, 0, 0.13, 1)",
+                fill: "forwards",
+                pseudoElement: "::view-transition-new(root)",
+        });
+    }
+
   return (
-    <div className={styles.page}>
-      <main className={styles.main}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol>
-          <li>
-            Get started by editing <code>app/page.tsx</code>.
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
-
-        <div className={styles.ctas}>
-          <a
-            className={styles.primary}
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className={styles.logo}
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
+    <ReactLenis root>
+      <main className={styles.home} ref={container}>
+        <div className={styles.hero}>
+          <h1 className={styles.fancytitle} id="fancytitle">Hi, my name is</h1>
+          <h1 className={styles.signature} id="signature">Daniel</h1>
+        </div>
+        <div className={styles.buttons}>
+          <a onClick={(e) => { e.preventDefault(); router.push("/projects", { onTransitionReady: slideInOut, }); }} href="/projects" className={styles.cta} id="projects-button">
+            <div>
+              <div className={styles.shimmer} id="projects-shimmer"></div>
+              Check out my Projects
+            </div>
           </a>
-          <a
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-            className={styles.secondary}
-          >
-            Read our docs
+          <a href="https://github.com/danielbusse/" className={styles.cta} id="github-button">
+            <div>
+              <div className={styles.shimmer} id="github-shimmer"></div>
+              Check out my Github
+            </div>
           </a>
         </div>
       </main>
-      <footer className={styles.footer}>
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
-    </div>
+    </ReactLenis>
   );
 }
