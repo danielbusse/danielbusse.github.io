@@ -1,0 +1,32 @@
+.main {
+    min-height: 100vh;
+    //background-image: url('/assets/1769725.jpg');
+    background-image: url('/assets/background3.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: justify;
+    padding-top: 100px;
+    padding-right: 20%;
+    padding-left: 20%;
+
+    color: white;
+
+
+    .intro {
+        max-width: 500px;
+        margin-bottom: 5%;
+        
+        text-align: center;
+        
+        h1 {
+            font-size: 4em;
+        }
+    }
+}
+

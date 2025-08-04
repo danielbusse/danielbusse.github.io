@@ -1,0 +1,89 @@
+body{
+    margin:0px;
+    background-color: black;
+}
+
+$themes: (
+ light: (
+   text: #030707,
+   background: #f8fcfc,
+   background-rgb: rgb(248, 252, 252),
+   primary: #55b3c3,
+   secondary: #da95c0,
+   secondary-rgb: "218, 149, 192",
+   accent: #743d60,
+ ),
+ dark: (
+   text: #f8fcfc,
+   background: #030707,
+   background-rgb: rgb(3, 7, 7),
+   primary: #3c99aa,
+   secondary: #6a254f,
+   accent: #b00710,
+ ),
+);
+
+@mixin theme-vars($theme-map) {
+    @each $key, $value in $theme-map {
+    --#{$key}: #{$value};
+  }
+}
+
+// Generate both theme classes
+.theme-light {
+  @include theme-vars(map-get($themes, light));
+}
+
+.theme-dark {
+  @include theme-vars(map-get($themes, dark));
+}
+
+// Default styles using CSS vars
+:root {
+  @include theme-vars(map-get($themes, light));
+}
+
+/* FONT */
+
+@font-face {
+    font-family: 'Signature';
+    src: url('/fonts/Simple Signature - TTF.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'Fancy Title';
+    src: url('/fonts/Ruigslay.ttf') format(truetype);
+}
+
+@font-face {
+    font-family: 'Links';
+    src: url('/fonts/AltMono-Light.otf') format(opentype);
+}
+
+
+/* ANIMATION PREREQUISITES */
+
+::view-transition-old(root),
+::view-transition-new(root) {
+    animation: none !important;
+}
+
+::view-transition-group(root) {
+    z-index: auto !important;
+}
+
+::view-transition-image-pair(root) {
+    isolation: isolate;
+    will-change: transform, opacity, clip-path;
+    z-index: 1;
+}
+
+::view-transition-new(root) {
+    z-index: 10000;
+    animation: none !important;
+}
+
+::view-transition-new(root) {
+    z-index: 1;
+    animation: none !important;
+}
