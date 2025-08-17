@@ -60,6 +60,26 @@ $themes: (
     src: url('/fonts/AltMono-Light.otf') format(opentype);
 }
 
+@font-face {
+    font-family: 'Wobble Title';
+    src: url('/fonts/ExpressionistaDemo-6R47A.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'Fanfarron';
+    src: url('/fonts/Fanfarron.otf') format(opentype);
+}
+
+@font-face {
+    font-family: 'Strech';
+    src: url('/fonts/StretchPro.otf') format(opentype);
+}
+
+@font-face {
+    font-family: 'Text';
+    src: url('/fonts/Coolvetica Rg.otf') format(opentype);
+}
+
 
 /* ANIMATION PREREQUISITES */
 
