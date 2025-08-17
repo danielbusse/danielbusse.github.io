@@ -1,7 +1,7 @@
 'use client';
 
 import { useTransitionRouter } from "next-view-transitions";
-import { useEffect, useState } from "react";
+//import { useEffect, useState } from "react";
 import styles from './Header.module.scss';
 
 import { useRef } from 'react';

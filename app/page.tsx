@@ -1,9 +1,9 @@
 'use client';
 
-import { motion } from 'framer-motion';
+//import { motion } from 'framer-motion';
 import { useTransitionRouter } from "next-view-transitions";
 import ReactLenis from '@studio-freight/react-lenis';
-import { usePathname } from "next/navigation";
+//import { usePathname } from "next/navigation";
 
 import styles from './home.module.scss';
 
@@ -18,11 +18,11 @@ export default function HomePage() {
 
   const container = useRef<HTMLElement | null>(null);
   const router = useTransitionRouter();
-  const links = ["/", "/about", "/projects", "/contact"];
-  const currentPath = usePathname();
+  //const links = ["/", "/about", "/projects", "/contact"];
+  //const currentPath = usePathname();
 
   useGSAP(() => {
-    let split = SplitText.create("#fancytitle", { type: "words, chars" });
+    const split = SplitText.create("#fancytitle", { type: "words, chars" });
     const tl = gsap.timeline();
     tl.add("bluespin", 1)
       .from(split.words, { duration: 1, y: 100, autoAlpha: 0, stagger: 0.4}, 0.2)

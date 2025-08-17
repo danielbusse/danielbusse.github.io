@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import "../styles/globals.scss";
 import { ViewTransitions } from "next-view-transitions"
-import { useEffect, useState } from "react";
+//import { useEffect, useState } from "react";
 
 import Header from '../components/Header';
 
