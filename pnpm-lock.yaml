@@ -30,6 +30,44 @@ importers:
       typescript:
         specifier: ^5
         version: 5
+      '@eslint/eslintrc': 
+        specifier: ^3
+        version: 3
+      eslint: 
+        specifier: ^9
+        version: 9
+      eslint-config-next: 
+        specifier: 15.4.1
+      sass: 
+        specifier: ^1.89.2
+        version: 1.89.2
+      '@gsap/react': 
+        specifier: ^2.1.2
+        version: 2.1.2
+      '@studio-freight/react-lenis': 
+        specifier: ^0.0.47
+        version: 0.0.47
+      clsx: 
+        specifier: ^2.1.1
+        version: 2.1.1
+      framer-motion: 
+        specifier: ^12.23.6
+        version: 12.23.6
+      gsap: 
+        specifier: ^3.13.0
+        version: 3.13.0
+      motion: 
+        specifier: ^12.23.6
+        verison: 12.23.6
+      next-view-transitions: 
+        specifier: 0.3.4
+        verison: 0.3.4
+      split-type: 
+        specifier: ^0.3.4
+        version: 0.3.4
+      tailwind-merge: 
+        specifier: ^3.3.1
+        version: 3.3.1
 
 packages:
 
