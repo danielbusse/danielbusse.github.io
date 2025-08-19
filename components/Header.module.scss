@@ -1,0 +1,44 @@
+.nav {
+    box-sizing: border-box;
+    padding: 0;
+    margin: 0;
+
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    color: white;
+    padding: 1.5rem;
+    z-index: 1000;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  
+    img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+
+    a {
+        text-decoration: none;
+        text-transform: uppercase;
+        color: white;
+        font-family: 'Links';
+        font-size: 18px;
+        font-weight: 600;
+        padding: 0.5em;
+    }
+
+    .breadcrumb {
+        font-family: "Links";
+        font-size: 10px;
+    }
+}
+
+.links {
+    display: flex;
+    gap: 2em;
+}
