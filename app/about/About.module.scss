@@ -15,6 +15,14 @@
 
     color: white;
 
+    .about{
+        text-align: justify;
+
+        width: 70%;
+        min-width: 300px;
+        max-width: 700px;
+    }
+
     .buttons {
         display: flex;
         justify-content: space-between;
@@ -25,7 +33,7 @@
             text-align: center;
             align-content: center;
             padding: 0.8rem 1.5rem;
-            margin: 53px;
+            margin: 23px;
             //background-color: var(--primary);
             color: white;
             border-radius: 8px;
@@ -41,34 +49,34 @@
             border-color: var(--secondary);
             border-radius: 20;
             transition-duration: 700ms;
-            width:  7em;
+            width:  100px;
             height: 3em;
 
 
             .shimmer {
-            height: 100px;
-            width: 10px;
-            background-image: linear-gradient(to left, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.6), rgba(255, 255, 255, 0.1));
-            position: absolute;
-            left: -80px;
-            top: -35px;
-            rotate: 30deg;
-            filter: blur(2px);
-            transition-duration: 700ms;
+                height: 100px;
+                width: 10px;
+                background-image: linear-gradient(to left, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.6), rgba(255, 255, 255, 0.1));
+                position: absolute;
+                left: -80px;
+                top: -35px;
+                rotate: 30deg;
+                filter: blur(2px);
+                transition-duration: 700ms;
             }  
 
             &:hover {
-            margin:51px;
-            background-color: rgba(var(--secondary-rgb), 0.5);
-            border-width: 3px;
-            border-color: var(--secondary);
-            transition-duration: 700ms;
-            color: white;
-
-            .shimmer {
-                left: 150%;
+                margin:51px;
+                background-color: rgba(var(--secondary-rgb), 0.5);
+                border-width: 3px;
+                border-color: var(--secondary);
                 transition-duration: 700ms;
-            }
+                color: white;
+
+                .shimmer {
+                    left: 150%;
+                    transition-duration: 700ms;
+                }
             }
         }
     }
