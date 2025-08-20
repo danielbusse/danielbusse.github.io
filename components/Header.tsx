@@ -76,7 +76,7 @@ export default function Header() {
 
     return (
         <nav className={styles.nav} id="navbar" ref={navbarRef}>
-            <div className="logo">
+            <div className={styles.logo}>
                 <div className="link">
                     <a 
                         onClick={(e) => {
@@ -91,7 +91,7 @@ export default function Header() {
                             }
                         }}
                         href={links[0]}>&rsaquo; Hello World</a>
-                        <span className="breadcrumb">{currentPath}</span>
+                        <span className={styles.breadcrumb}>{currentPath}</span>
                 </div>
             </div>
             <div className="links">
