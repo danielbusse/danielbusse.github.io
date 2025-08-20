@@ -15,7 +15,7 @@ export default function About() {
                         Selected Projects
                     </h1>
                     <span className={styles.notice}>
-                        Below you can find a selection of projects I have worked on in the past. Feel free to read them.
+                        Below you can find a selection of projects I have worked on in the past.
                     </span>
                 </section>
                 
