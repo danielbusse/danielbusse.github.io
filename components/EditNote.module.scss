@@ -1,0 +1,34 @@
+.note {
+    display: flex;
+    align-items: center;       // vertikale Mitte
+    justify-content: center;   // horizontale Mitte
+    gap: 1rem;                 // Abstand zwischen Icon und Text
+
+    max-width: 300px;
+    padding: 1rem 1.5rem;
+    border-radius: 12px;
+    border: 3px solid #53a9ff;
+    background: #00468b;
+
+    .icon {
+        font-size: 3rem;   // Emoji wird groß
+        flex-shrink: 0;    // bleibt fix, schrumpft nicht
+        line-height: 1;
+    }
+
+    .text{
+        font-family: 'Text';
+        font-size: 1rem;
+        line-height: 1.4;  // macht zwei Zeilen harmonisch
+        text-align: left;
+
+        display: flex;
+        align-items: center;     // vertikal zentriert zum Icon
+    }
+}
+
+.wrapper {
+    display: flex;
+    justify-content: center;
+    padding: 1rem;
+}

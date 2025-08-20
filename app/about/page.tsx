@@ -1,6 +1,7 @@
 "use client"
 
 import ReactLenis from "@studio-freight/react-lenis";
+import EditNote from "@/components/EditNote";
 
 import styles from './About.module.scss'
 
@@ -9,6 +10,7 @@ export default function ProjectsPage() {
         <ReactLenis root>
             <div className={styles.main}>
                 <div className={styles.about}>
+                    <EditNote />
                     <h1>
                         Welcome!
                     </h1>
