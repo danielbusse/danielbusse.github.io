@@ -31,7 +31,7 @@ export default function ProjectsPage() {
                         If you want to read about my professional work, feel free to check out my CV, LinkedIn and GitHub below! Or read about some project I worked on under <a>Projects section</a>.
                     </p>
                     <div className={styles.buttons}>
-                        <a href="https://danielbusse.github.io/cv" className={styles.cta} id="cv-button">
+                        <a href="/cv" className={styles.cta} id="cv-button">
                             <div>
                                 <div className={styles.shimmer} id="github-shimmer"></div>
                                 Read my CV
