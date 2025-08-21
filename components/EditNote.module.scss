@@ -1,6 +1,7 @@
 .note {
     color: white;
     display: flex;
+    flex-wrap: nowrap;
     align-items: center;       // vertikale Mitte
     justify-content: center;   // horizontale Mitte
     gap: 1rem;                 // Abstand zwischen Icon und Text
@@ -10,6 +11,10 @@
     border-radius: 12px;
     border: 3px solid #53a9ff;
     background: #00468b;
+
+    @media (max-width: 350px) {
+        flex-wrap: wrap;
+    }
 
     .icon {
         font-size: 3rem;   // Emoji wird groß
