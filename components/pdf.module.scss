@@ -1,21 +1,19 @@
-.pdf {
+.wrapper {
+
+    display: flex;
     width: 100%;
     max-width: calc(100% - 2em);
-    margin: 1em 0;
+    aspect-ratio: 1 / 1.52;
 
-    .react-pdf__Document {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-    }
-    
-    .react-pdf__Page {
-        margin: 1em 0;
-        box-shadow: 0 0 8px rgba(0, 0, 0, 0.5);
-    }
+    margin: 1em auto;
 
-    .react-pdf__message {
-        padding: 20px;
-        color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    object, embed {
+        width: 100%;
+        height: 100%;
+        border: none;
     }
 }
