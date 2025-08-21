@@ -11,23 +11,25 @@
     align-items: center;
     text-align: justify;
     padding-top: 100px;
-    padding-right: 20%;
-    padding-left: 20%;
+    padding-right: 10%;
+    padding-left: 10%;
 
     color: white;
 
     .about{
         text-align: justify;
 
-        width: 70%;
-        min-width: 300px;
-        max-width: 700px;
+        width: 100%;
+        max-width: 600px;
+
+        font-family: 'Text';
     }
 
     .buttons {
         display: flex;
-        justify-content: space-between;
+        //justify-content: space-between;
         align-items: center;
+        justify-content: center;
 
         .cta {
             align-items: center;
@@ -50,7 +52,9 @@
             border-color: rgba(0, 238, 255, 0.5);
             border-radius: 20;
             transition-duration: 700ms;
-            width:  100px;
+            width:  100%;
+            max-width: 90px;
+            min-width: 84px;
             height: 3em;
 
 
