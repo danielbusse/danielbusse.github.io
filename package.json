@@ -16,7 +16,7 @@
     "framer-motion": "^12.23.6",
     "gsap": "^3.13.0",
     "motion": "^12.23.6",
-    "next": "^15.4.1",
+    "next": "^15.5.7",
     "next-view-transitions": "^0.3.4",
     "pdfjs-dist": "^5.4.54",
     "react": "^18.2.0",
