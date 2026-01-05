@@ -16,7 +16,7 @@
     padding-left: 20%;
 
     color: rgb(219, 219, 219);
-    font-family: 'Text';
+    font-family: var(--font-text);
     font-weight: 100;
 
     .intro {
@@ -28,7 +28,7 @@
         h1 {
             text-align: center;
             font-size: 6em;
-            font-family: 'Wobble Title', sans-serif;
+            font-family: var(--font-wobble-title), sans-serif;
             font-weight: 100;
             text-transform: uppercase;
             

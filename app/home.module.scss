@@ -21,11 +21,11 @@
     margin: 0;
   
     &.fancytitle {
-      font-family: 'Fancy Title';
+      font-family: var(--font-fancy-title);
     }
     
     &.signature {
-      font-family: 'Signature', sans-serif;
+      font-family: var(--font-signature), sans-serif;
       font-weight: lighter;
       font-size: 12rem;
       margin-bottom: 1rem;
@@ -51,7 +51,7 @@
     color: white;
     border-radius: 8px;
     text-decoration: none;
-    font-family: 'Links';
+    font-family: var(--font-links);
     font-weight: 600;
     transition: background-color 0.3s ease;
     position: relative;
@@ -63,31 +63,13 @@
     border-radius: 20;
     transition-duration: 700ms;
 
-
-    .shimmer {
-      height: 100px;
-      width: 10px;
-      background-image: linear-gradient(to left, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.6), rgba(255, 255, 255, 0.1));
-      position: absolute;
-      left: -80px;
-      top: -35px;
-      rotate: 30deg;
-      filter: blur(2px);
-      transition-duration: 700ms;
-    }  
-
     &:hover {
-      margin:51px;
+      margin:53px;
       background-color: rgba(var(--secondary-rgb), 0.5);
       border-width: 3px;
       border-color: var(--secondary);
       transition-duration: 700ms;
       color: white;
-
-      .shimmer {
-        left: 150%;
-        transition-duration: 700ms;
-      }
     }
   }
 }

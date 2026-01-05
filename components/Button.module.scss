@@ -1,0 +1,30 @@
+@use '../styles/mixins.scss' as *;
+
+.button {
+  // Default styles that can be overridden via props/classes
+  padding: 0.8rem 1.5rem;
+  color: white;
+  font-family: var(--font-links), sans-serif;
+  font-weight: 600;
+  
+  // Apply the mixin with default theme colors
+  // We assume CSS variables are available
+  @include shimmer-button(
+    var(--secondary), 
+    rgba(var(--secondary-rgb), 0.5)
+  );
+
+  // Fix for the border-width change causing layout shift
+  // Original code changed margin. A better way is to reduce padding.
+  border-width: 1px;
+  
+  &:hover {
+    border-width: 3px;
+    padding: calc(0.8rem - 2px) calc(1.5rem - 2px); // Compensate for 2px added border
+    margin: 0; // Reset any margin hacks
+  }
+}
+
+.shimmer {
+  // Styles are handled by mixin, but we need the class for the div
+}

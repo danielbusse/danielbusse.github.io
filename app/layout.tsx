@@ -1,10 +1,52 @@
 import type { Metadata } from "next";
+import localFont from "next/font/local";
 import "../styles/globals.scss";
 import { ViewTransitions } from "next-view-transitions"
 //import { useEffect, useState } from "react";
 
 import Header from '../components/Header';
 
+const signature = localFont({
+  src: '../public/fonts/Simple Signature - TTF.ttf',
+  variable: '--font-signature',
+  display: 'swap',
+});
+
+const fancyTitle = localFont({
+  src: '../public/fonts/Ruigslay.ttf',
+  variable: '--font-fancy-title',
+  display: 'swap',
+});
+
+const links = localFont({
+  src: '../public/fonts/AltMono-Light.otf',
+  variable: '--font-links',
+  display: 'swap',
+});
+
+const wobbleTitle = localFont({
+  src: '../public/fonts/ExpressionistaDemo-6R47A.ttf',
+  variable: '--font-wobble-title',
+  display: 'swap',
+});
+
+const fanfarron = localFont({
+  src: '../public/fonts/Fanfarron.otf',
+  variable: '--font-fanfarron',
+  display: 'swap',
+});
+
+const stretch = localFont({
+  src: '../public/fonts/StretchPro.otf',
+  variable: '--font-stretch',
+  display: 'swap',
+});
+
+const text = localFont({
+  src: '../public/fonts/Helvetica.ttf',
+  variable: '--font-text',
+  display: 'swap',
+});
 
 export const metadata: Metadata = {
   title: "Portfolio",
@@ -22,7 +64,7 @@ export default function RootLayout({
   return (
     <ViewTransitions>
       <html lang="en">
-        <body>
+        <body className={`${signature.variable} ${fancyTitle.variable} ${links.variable} ${wobbleTitle.variable} ${fanfarron.variable} ${stretch.variable} ${text.variable}`}>
           <Header/>
           {children}
         </body>

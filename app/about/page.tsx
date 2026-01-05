@@ -1,7 +1,8 @@
 "use client"
 
-import ReactLenis from "@studio-freight/react-lenis";
+import { ReactLenis } from 'lenis/react';
 import EditNote from "@/components/EditNote";
+import Button from "@/components/Button";
 
 import styles from './About.module.scss'
 
@@ -33,24 +34,27 @@ export default function ProjectsPage() {
                         If you want to read about my professional work, feel free to check out my CV, LinkedIn and GitHub below! Or read about some project I worked on under <a>Projects section</a>.
                     </p>
                     <div className={styles.buttons}>
-                        <a href="/cv" className={styles.cta} id="cv-button">
-                            <div>
-                                <div className={styles.shimmer} id="github-shimmer"></div>
-                                Read my CV
-                            </div>
-                        </a>
-                        <a href="https://www.linkedin.com/in/danielbusse97" className={styles.cta} id="linkedin-button">
-                            <div>
-                                <div className={styles.shimmer} id="github-shimmer"></div>
-                                Visit my LinkedIn
-                            </div>
-                        </a>
-                        <a href="https://github.com/danielbusse/" className={styles.cta} id="github-button">
-                            <div>
-                                <div className={styles.shimmer} id="github-shimmer"></div>
-                                Check out my Github
-                            </div>
-                        </a>
+                        <Button 
+                            href="/cv" 
+                            id="cv-button"
+                            className={styles.cta}
+                        >
+                            Read my CV
+                        </Button>
+                        <Button 
+                            href="https://www.linkedin.com/in/danielbusse97" 
+                            id="linkedin-button"
+                            className={styles.cta}
+                        >
+                            Visit my LinkedIn
+                        </Button>
+                        <Button 
+                            href="https://github.com/danielbusse/" 
+                            id="github-button"
+                            className={styles.cta}
+                        >
+                            Check out my Github
+                        </Button>
                     </div>
                 </div>
             </div>

@@ -1,6 +1,6 @@
 "use client"
 
-import ReactLenis from "@studio-freight/react-lenis";
+import { ReactLenis } from 'lenis/react';
 import React from "react";
 
 import Timeline from '@/components/Timeline';

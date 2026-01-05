@@ -9,6 +9,7 @@ import { useGSAP } from '@gsap/react';
 import gsap from 'gsap';
 
 import { usePathname } from "next/navigation";
+import { slideInOut, slideInDown } from '../utils/animations';
 
 export default function Header() {
     const links = ["/", "/about", "/projects", "/contact"];
@@ -19,13 +20,13 @@ export default function Header() {
     
     useGSAP(() => {
         if (currentPath == "/") {
-            gsap.set("#navbar", {y:-200})
+            // Initial state is handled by the tween now, or we can set it if needed to prevent flash
+            gsap.set("#navbar", {y:-200}) 
             
             const onMouseMove = () => {
                 if (!hasAnimated.current && navbarRef.current) {
                     hasAnimated.current = true;
-
-                    gsap.to("#navbar", {y:0, duration: 1, ease:"power4.out"});
+                    slideInDown("#navbar");
                 }
             };
             
@@ -39,40 +40,6 @@ export default function Header() {
      * For site transitions
      */
     const router = useTransitionRouter();
-
-    function slideInOut() {
-        document.documentElement.animate(
-            [
-                {
-                    opacity: 1,
-                    transform: "translateY(0)",
-                },
-                {
-                    opacity: 0.2,
-                    transform: "translateY(-35%)",
-                }
-            ], {
-                duration: 1500,
-                easing: "cubic-bezier(0.87, 0, 0.13, 1)",
-                fill: "forwards",
-                pseudoElement: "::view-transition-old(root)",
-        });
-
-        document.documentElement.animate(
-            [
-                {
-                    clipPath: "polygon(0% 100%, 100% 100%, 100% 100%, 0% 100%)",
-                },
-                {
-                    clipPath: "polygon(0% 100%, 100% 100%, 100% 0%, 0% 0%)",
-                }
-            ], {
-                duration: 1500,
-                easing: "cubic-bezier(0.87, 0, 0.13, 1)",
-                fill: "forwards",
-                pseudoElement: "::view-transition-new(root)",
-        });
-    }
 
     return (
         <nav className={styles.nav} id="navbar" ref={navbarRef}>

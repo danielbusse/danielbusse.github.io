@@ -1,4 +1,4 @@
-body{
+html, body{
     margin:0px;
     background-color: black;
 }
@@ -45,44 +45,13 @@ $themes: (
 
 /* FONT */
 
-@font-face {
-    font-family: 'Signature';
-    src: url('/fonts/Simple Signature - TTF.ttf') format('truetype');
-}
-
-@font-face {
-    font-family: 'Fancy Title';
-    src: url('/fonts/Ruigslay.ttf') format(truetype);
-}
-
-@font-face {
-    font-family: 'Links';
-    src: url('/fonts/AltMono-Light.otf') format(opentype);
-}
-
-@font-face {
-    font-family: 'Wobble Title';
-    src: url('/fonts/ExpressionistaDemo-6R47A.ttf') format('truetype');
-}
-
-@font-face {
-    font-family: 'Fanfarron';
-    src: url('/fonts/Fanfarron.otf') format(opentype);
-}
-
-@font-face {
-    font-family: 'Strech';
-    src: url('/fonts/StretchPro.otf') format(opentype);
-}
-
-@font-face {
-    font-family: 'Text';
-    src: url('/fonts/Helvetica.ttf') format('truetype');
-    //src: url('/fonts/Coolvetica Rg.otf') format(opentype);
-}
-
+/* Fonts are now loaded via next/font/local in app/layout.tsx */
 
 /* ANIMATION PREREQUISITES */
+
+::view-transition {
+    background-color: black;
+}
 
 ::view-transition-old(root),
 ::view-transition-new(root) {
@@ -91,6 +60,7 @@ $themes: (
 
 ::view-transition-group(root) {
     z-index: auto !important;
+    background-color: black;
 }
 
 ::view-transition-image-pair(root) {
@@ -101,10 +71,5 @@ $themes: (
 
 ::view-transition-new(root) {
     z-index: 10000;
-    animation: none !important;
-}
-
-::view-transition-new(root) {
-    z-index: 1;
     animation: none !important;
 }
