@@ -1,40 +1,67 @@
-.note {
-    color: white;
-    display: flex;
-    flex-wrap: nowrap;
-    align-items: center;       // vertikale Mitte
-    justify-content: center;   // horizontale Mitte
-    gap: 1rem;                 // Abstand zwischen Icon und Text
-
-    max-width: 300px;
-    padding: 1rem 1.5rem;
-    border-radius: 12px;
-    border: 3px solid #53a9ff;
-    background: #00468b;
-
-    @media (max-width: 350px) {
-        flex-wrap: wrap;
-    }
-
-    .icon {
-        font-size: 3rem;   // Emoji wird groß
-        flex-shrink: 0;    // bleibt fix, schrumpft nicht
-        line-height: 1;
-    }
-
-    .text{
-        font-family: var(--font-text);
-        font-size: 1rem;
-        line-height: 1.4;  // macht zwei Zeilen harmonisch
-        text-align: left;
-
-        display: flex;
-        align-items: center;     // vertikal zentriert zum Icon
-    }
-}
-
 .wrapper {
     display: flex;
     justify-content: center;
-    padding: 1rem;
+    padding: 1rem 0;
+    width: 100%;
+}
+
+.note {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    
+    padding: 0.5rem 1rem;
+    border-radius: 999px; // Pill shape
+    overflow: hidden; // Ensure text is hidden when collapsed
+    
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    
+    color: rgba(255, 255, 255, 0.9);
+    font-family: var(--font-text);
+    font-size: 0.85rem;
+    
+    transition: all 0.3s ease;
+    cursor: default;
+
+    &:hover {
+        background: rgba(255, 255, 255, 0.15);
+        border-color: rgba(255, 255, 255, 0.4);
+        transform: translateY(-1px);
+    }
+
+    .icon {
+        font-size: 1.1rem;
+        line-height: 1;
+        display: inline-block;
+        // Animation is now handled by GSAP in EditNote.tsx
+        transform-origin: center center;
+    }
+
+    .text {
+        white-space: pre;
+        
+        strong {
+            font-weight: 600;
+            color: var(--primary); // Use theme color for emphasis
+            margin-right: 0.3em;
+        }
+    }
+
+    .cursor {
+        display: inline-block;
+        width: 2px;
+        height: 1em;
+        background-color: var(--primary);
+        margin-left: 1px;
+        animation: blink 1s step-end infinite;
+        vertical-align: text-bottom;
+    }
+}
+
+@keyframes blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0; }
 }

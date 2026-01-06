@@ -103,3 +103,84 @@ export const slideInDown = (target: string | Element, vars?: gsap.TweenVars) => 
     { y: 0, duration: 1, ease: "power4.out", ...vars }
   );
 };
+
+/**
+ * Creates a modular handwriting animation for an icon.
+ * @param target The element to animate (e.g., the hand icon)
+ * @param width The total width covered by the writing motion
+ * @param steps The number of strokes/steps in the writing phase
+ * @param duration Total duration of one full cycle (write + return)
+ * @returns GSAP Timeline
+ */
+export function animateHandWriting(
+  target: gsap.TweenTarget,
+  width: number,
+  steps: number,
+  duration: number = 2
+) {
+  const tl = gsap.timeline({ repeat: -1, defaults: { ease: "linear" } });
+  const stepSize = width / steps;
+  const startX = -width / 2;
+
+  // Initial state
+  tl.set(target, { x: startX, y: 0, rotation: 0 });
+
+  // Writing phase (approx 80% of duration)
+  const writeDuration = (duration * 0.8) / steps;
+
+  for (let i = 1; i <= steps; i++) {
+    const isOdd = i % 2 !== 0;
+    const x = startX + (i * stepSize);
+    // "writing height change should be abwechselnd -step_size/2 and step_size/2"
+    const y = isOdd ? stepSize / 2 : -stepSize / 2;
+    const rotation = isOdd ? -5 : 0;
+
+    tl.to(target, {
+      x: x,
+      y: y,
+      rotation: rotation,
+      duration: writeDuration,
+    });
+  }
+
+  // Return phase (approx 20% of duration)
+  // "return height should be step_size*2" (Arc upwards)
+  const returnDuration = duration * 0.2;
+  
+  tl.to(target, {
+    x: startX,
+    y: -stepSize * 2, // Arc up
+    rotation: -10,
+    duration: returnDuration * 0.5, // Halfway back
+    ease: "power1.out"
+  })
+  .to(target, {
+    x: startX,
+    y: 0,
+    rotation: 0,
+    duration: returnDuration * 0.5, // Land
+    ease: "power1.in"
+  });
+
+  return tl;
+}
+
+/**
+ * Waving Hand Animation
+ * Rotates the target element back and forth to simulate a waving motion.
+ * Waves exactly 2 times.
+ * @param target The element to animate
+ * @param delay Optional delay before starting the animation (in seconds)
+ */
+export const animateWave = (target: gsap.TweenTarget, delay: number = 0) => {
+    const tl = gsap.timeline({ delay: delay });
+    
+    tl.to(target, { rotation: 25, duration: 0.15, ease: "power1.out" })
+      .to(target, { rotation: -10, duration: 0.15, ease: "power1.inOut" })
+      .to(target, { rotation: 25, duration: 0.15, ease: "power1.inOut" })
+      .to(target, { rotation: -10, duration: 0.15, ease: "power1.inOut" })
+      .to(target, { rotation: 0, duration: 0.25, ease: "back.out(1.7)" });
+      
+    return tl;
+};
+

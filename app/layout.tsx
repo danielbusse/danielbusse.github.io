@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
+import { Space_Grotesk, Outfit } from "next/font/google";
 import "../styles/globals.scss";
 import { ViewTransitions } from "next-view-transitions"
 //import { useEffect, useState } from "react";
@@ -48,6 +49,24 @@ const text = localFont({
   display: 'swap',
 });
 
+const spaceGrotesk = Space_Grotesk({
+  subsets: ['latin'],
+  variable: '--font-space-grotesk',
+  display: 'swap',
+});
+
+const outfit = Outfit({
+  subsets: ['latin'],
+  variable: '--font-outfit',
+  display: 'swap',
+});
+
+const charter = localFont({
+  src: '../public/fonts/Charter Regular.otf',
+  variable: '--font-charter',
+  display: 'swap',
+});
+
 export const metadata: Metadata = {
   title: "Portfolio",
   description: "Portfolio of Daniel Busse",
@@ -64,7 +83,7 @@ export default function RootLayout({
   return (
     <ViewTransitions>
       <html lang="en">
-        <body className={`${signature.variable} ${fancyTitle.variable} ${links.variable} ${wobbleTitle.variable} ${fanfarron.variable} ${stretch.variable} ${text.variable}`}>
+        <body className={`${signature.variable} ${fancyTitle.variable} ${links.variable} ${wobbleTitle.variable} ${fanfarron.variable} ${stretch.variable} ${text.variable} ${charter.variable} ${spaceGrotesk.variable} ${outfit.variable}`}>
           <Header/>
           {children}
         </body>
