@@ -1,7 +1,6 @@
-// based on Jonas Joseph's Respopnsive Timeline Concept
 "use client";
 
-import React, { useRef, useMemo } from "react";
+import React, { useRef, useMemo, useEffect, useState } from "react";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -9,357 +8,401 @@ import projectsData from "@/data/projects.json";
 import styles from "./Timeline.module.scss";
 import Link from "next/link";
 
+// Register GSAP plugins
 if (typeof window !== "undefined") {
     gsap.registerPlugin(ScrollTrigger, useGSAP);
 }
 
-export default function Timeline() {
-    const containerRef = useRef<HTMLDivElement>(null);
-    const dateRefs = useRef<(HTMLDivElement | null)[]>([]);
-    const dotRefs = useRef<(HTMLDivElement | null)[]>([]);
-    const lineRefs = useRef<(HTMLDivElement | null)[]>([]);
-    const sectionRefs = useRef<(HTMLDivElement | null)[]>([]);
+interface TimelineItem {
+    type: 'date' | 'project';
+    content?: string;
+    data?: any;
+    key: string;
+    index: number;
+    gapBefore: number; // Distance from previous item
+    pos: number; // Absolute linear position
+}
 
-    const timelineItems = useMemo(() => {
-        const items: any[] = [];
-        projectsData.forEach((section) => {
-            // 1. The Date Pill itself is an item
-            items.push({
-                type: 'date',
-                content: section.period,
-                key: `date-${section.period}`
-            });
-            // 2. The Projects are subsequent items
-            section.projects.forEach((project, index) => {
-                items.push({
-                    type: 'project',
-                    data: project,
-                    key: `proj-${section.period}-${index}`   
-                });
-            });
-        });
-        return items;
+interface TimelineProps {
+    radius?: number; // Virtual radius of the wheel in pixels or units
+    itemBaseHeight?: number; // Base unit for spacing
+}
+
+export default function Timeline({ radius = 800, itemBaseHeight = 150 }: TimelineProps) {
+    const containerRef = useRef<HTMLDivElement>(null);
+    const viewportRef = useRef<HTMLDivElement>(null);
+    const [activeIndex, setActiveIndex] = useState(0);
+
+    const [windowHeight, setWindowHeight] = useState(0);
+    // Removed cached pillWidths to use direct read due to stability issues
+    // const [pillWidths, setPillWidths] = useState<Record<string, number>>({});
+
+    // Initial window size
+    useEffect(() => {
+        setWindowHeight(window.innerHeight);
+        const handleResize = () => setWindowHeight(window.innerHeight);
+        window.addEventListener('resize', handleResize);
+        return () => window.removeEventListener('resize', handleResize);
     }, []);
 
-    // Helper to determine spacing based on relationship between current item and next item
-    const getSpacing = (currentItem: any, nextItem: any) => {
-        if (!currentItem || !nextItem) return 150; // Default deep off-screen
+    // 1. Prepare Data
+    const items = useMemo(() => {
+        if (typeof window === "undefined" && windowHeight === 0) return []; // partial hydration guard
 
-        // Date -> Project = Match the Px->Date spacing to ensure consistent "throw"
-        if (currentItem.type === 'date' && nextItem.type === 'project') return 25;
+        const tempItems: any[] = [];
         
-        // Project -> Project = Wider gap between cards in same period
-        if (currentItem.type === 'project' && nextItem.type === 'project') return 40;
+        projectsData.forEach((section) => {
+            // Date Pill
+            tempItems.push({
+                type: 'date',
+                content: section.period,
+                key: `date-${section.period}`,
+                data: null
+            });
+            // Projects
+            section.projects.forEach((project, pIndex) => {
+                tempItems.push({
+                    type: 'project',
+                    data: project,
+                    content: null,
+                    key: `proj-${section.period}-${pIndex}`
+                });
+            });
+        });
+
+        // Constants for logic
+        const H_DATE = 42; // px approx
+        const H_CARD = 240; // px approx
         
-        // Project -> Date = Large Gap (Period Change) - This is the "Good" one we are mimicking
-        if (currentItem.type === 'project' && nextItem.type === 'date') return 50;
+        // VH gaps
+        const VH_DATE_PROJ = 0.05; // 5vh
+        const VH_PROJ_PROJ = 0.05; // 5vh
+        const VH_PROJ_DATE = 0.15; // 15vh
+        const VH = windowHeight || 1080; // Fallback
 
-        return 60; // Fallback
-    };
+        // specific gap logic requested by user
+        // Gap = (HeightPrev/2) + (HeightCurr/2) + VH_Percentage * VH
+        let currentPos = 0;
+        
+        return tempItems.map((item, i, arr) => {
+            let gap = 0;
+            const prev = arr[i - 1];
+            
+            if (prev) {
+                const hPrev = prev.type === 'date' ? H_DATE : H_CARD;
+                const hCurr = item.type === 'date' ? H_DATE : H_CARD;
+                
+                let vhGap = 0;
+                
+                if (prev.type === 'date' && item.type === 'project') vhGap = VH_DATE_PROJ;
+                else if (prev.type === 'project' && item.type === 'project') vhGap = VH_PROJ_PROJ;
+                else if (prev.type === 'project' && item.type === 'date') vhGap = VH_PROJ_DATE;
+                
+                // Gap logic:
+                // We want the space between standard DOM flow elements to include the elements themselves?
+                // No, "gap" usually means empty space. 
+                // But `pos` is center-to-center distance.
+                // So center-to-center = (hPrev/2) + GAP + (hCurr/2).
+                
+                gap = (hPrev / 2) + (hCurr / 2) + (vhGap * VH);
+            } else {
+                gap = 0; // First item starts at 0
+            }
 
-    // Helper to calculate curve X position based on Y (0-1 normalized height)
-    // Curve: Starts at x=120, curves left to x=80 at center, back to x=120
-    // Using Quadratic Bezier alignment: x = 120 - 160*t + 160*t*t
-    const getCurveX = (t: number) => {
-        return 120 - (160 * t) + (160 * t * t);
-    };
+            currentPos += gap;
+
+            return {
+                ...item,
+                index: i,
+                gapBefore: gap,
+                pos: currentPos
+            } as TimelineItem;
+        });
+    }, [itemBaseHeight, windowHeight]);
+
+    const [pillWidths, setPillWidths] = useState<Record<string, number>>({});
+
+    // Measure pill widths once on mount/resize
+    useEffect(() => {
+        const measure = () => {
+            const widths: Record<string, number> = {};
+            items.forEach(item => {
+                if (item.type === 'date') {
+                    const el = document.getElementById(item.key);
+                    const pill = el?.querySelector(`.${styles.datePill}`) as HTMLElement;
+                    if (pill) {
+                        widths[item.key] = pill.offsetWidth / 2;
+                    }
+                }
+            });
+            setPillWidths(widths);
+        };
+        
+        // Slight delay to ensure render
+        setTimeout(measure, 100);
+        window.addEventListener('resize', measure);
+        return () => window.removeEventListener('resize', measure);
+    }, [items]);
+
+    const totalDistance = items[items.length - 1]?.pos || 0;
+    
+    // Config for Ring Position
+    const RING_X_OFFSET = 300; // Distance from center of screen to the ring plane
+
+    // Enable CSS Scroll Snap on the document
+    useEffect(() => {
+        document.documentElement.style.scrollSnapType = 'y proximity'; // 'proximity' is less aggressive than 'mandatory', allows free scroll but catches alignment
+        // Trying 'mandatory' for strict one-step feel
+        document.documentElement.style.scrollSnapType = 'y mandatory'; 
+        
+        return () => {
+            document.documentElement.style.scrollSnapType = '';
+        };
+    }, []);
 
     useGSAP(() => {
-        // Use refs instead of querySelector to ensure we get the elements
-        const sections = sectionRefs.current; // Don't filter, we need index correspondence
+        if (!items.length) return;
+
+        // Ensure container has height to scroll
+        // The scrollable distance should map to the totalDistance of items
         
-        // Physics Consts (Log curvature)
-        // Adjust these to change the "tightness" of the wheel
-        // Updated for "Slower" tilt and larger radius feel
-        const DEG_PER_VH = 0.12;      // Reduced to tilt slower
-        const SCALE_PER_VH = 0.002; 
-        const Z_PER_VH = 0.4;        // Reduced depth push
-
-        if (sections.length === 0) return;
-
-        // Initial setup
-        sections.forEach((section, i) => {
-            if (!section) return;
-            gsap.set(section, { transformPerspective: 1000, transformStyle: "preserve-3d" });
+        const updateItems = () => {
+            const scrollY = window.scrollY; // Or use a specific scroller if not window
             
-            if (i === 0) {
-                // Active: Center, Flat, Full Size
-                gsap.set(section, { y: 0, autoAlpha: 1, scale: 1, rotationX: 0, z: 0 });
-            } else if (i === 1) {
-                // Next Peek: Calculated based on its specific gap
-                const gap = getSpacing(timelineItems[0], timelineItems[1]);
-                
-                const rot = -gap * DEG_PER_VH;
-                const sc = 1 - (gap * SCALE_PER_VH);
-                const zDist = -gap * Z_PER_VH;
+            const viewportCheck = window.innerHeight;
+            
+            const scrollProgress = scrollY; // Pixel for Pixel mapping?
+            
+            // Loop through items and update their transform
+            items.forEach((item, i) => {
+                const el = document.getElementById(item.key);
+                if (!el) return;
 
-                gsap.set(section, { 
-                    y: `${gap}vh`, 
-                    autoAlpha: 0.5, 
-                    scale: sc, 
-                    rotationX: rot, 
-                    z: zDist, 
-                    transformOrigin: "center top" 
+                // Distance from the "focus" point (current scroll position)
+                const distance = item.pos - scrollProgress;
+                
+                // If distance is too far, hide or optimize?
+                if (Math.abs(distance) > radius * 1.5) {
+                    el.style.display = 'none';
+                    return;
+                }
+                el.style.display = 'flex';
+
+                // Physical Wheel Math
+                // angle = distance / radius
+                const angle = distance / radius; // radians
+                const angleDeg = angle * (180 / Math.PI);
+
+                // Y position on screen (relative to center)
+                // On a wheel: Y = R * sin(angle)
+                // But we want it flat at center.
+                // Standard 3D wheel: 
+                // z = R * (cos(angle) - 1)  (0 at center, negative away) or R * cos(angle) - R
+                // y = R * sin(angle)
+                
+                // User wants: "focus state ... not rotated, scaled or faded ... center of screen"
+                // So at distance=0 -> y=0, rot=0, scale=1
+                
+                const y = radius * Math.sin(angle);
+                const z = radius * (Math.cos(angle) - 1);
+                
+                // Rotation: The element should face the center of the wheel?
+                // If it's a rolodex, it rotates corresponding to the angle.
+                // angle 0 -> rot 0.
+                // angle positive (below) -> rot negative (tilt back/up)? 
+                // Let's try `rotateX = -angleDeg`.
+                const rotateX = -angleDeg;
+                
+                // Scale & Opacity
+                // Focus: 1. Exit: scaled/faded.
+                // We can base this on angle magnitude.
+                const absAngle = Math.abs(angle);
+                const scale = 1 - (absAngle * 0.2); // linear falloff
+                const opacity = 1 - (absAngle * 0.5); // fade out
+                
+                // Z-Index: Closer to focus (0 angle) means higher z-index
+                const zIndex = Math.floor(100 - absAngle * 10);
+
+                // Apply
+                const finalScale = Math.max(0, scale);
+                gsap.set(el, {
+                    y: y,
+                    z: z,
+                    rotationX: rotateX,
+                    scale: finalScale,
+                    opacity: Math.max(0, opacity),
+                    zIndex: zIndex
                 });
-            } else {
-                // Deep: Generic starting point - Pushed further down/back
-                gsap.set(section, { y: '120vh', autoAlpha: 0, scale: 0.7, rotationX: -30, z: -100, transformOrigin: "center top" });
-            }
-        });
-        
-        // Master Pinned Timeline
-        const tl = gsap.timeline({
-            scrollTrigger: {
-                trigger: containerRef.current, 
-                start: "top top", 
-                end: "+=" + (sections.length * 1000), // Increased scroll speed (reduced distance)
-                scrub: 1,
-                pin: true,
-            }
-        });
 
-        // Animation Loop - Rolling Log Effect
-        timelineItems.forEach((item, i) => {
-            if (i >= sections.length || !sections[i]) return;
-            const currentSection = sections[i];
-            const nextItem = timelineItems[i + 1];
-            
-            // Determine the "step size" for this scroll segment based on the gap to the next item
-            const gap = (item && nextItem) ? getSpacing(item, nextItem) : 60;
-            const duration = gap / 30; // Normalizes speed
-            
-            // Calculate specific physics for THIS gap
-            const rot = gap * DEG_PER_VH;
-            const sc = 1 - (gap * SCALE_PER_VH);
-            const zDist = -(gap * Z_PER_VH);
+                // --- FOCUS GLOW EFFECT ---
+                // Find visual target (Date Pill or Project Card)
+                const datePillRef = el.querySelector(`.${styles.datePill}`) as HTMLElement;
+                const projectCardRef = el.querySelector(`.${styles.projectCard}`) as HTMLElement;
+                const visualTarget = datePillRef || projectCardRef;
 
-            // Universal Easing: power1.inOut creates a "Slow Start / Slow End" curve
-            // This makes the element linger in the center ("focus") and move faster through the transition
-            const scrollEase = "power1.inOut";
+                if (visualTarget) {
+                     // 0 angle = max glow. Falloff faster than opacity.
+                     const glowIntensity = Math.max(0, 1 - (absAngle * 2.5)); 
+                     
+                     // Define visual params
+                     const isDate = !!datePillRef;
+                     const color = '255, 255, 255';
+                     const alpha = isDate ? 0.6 : 0.4;
+                     const blur = isDate ? 15 : 25; // px
+                     
+                     // Match CSS base shadows
+                     const baseShadow = isDate 
+                        ? '0 4px 6px rgba(0,0,0,0.1)' 
+                        : '0 10px 30px rgba(0,0,0,0.15)'; // Update if CSS changes!
+                     
+                     // Construct Shadow String: Glow Layer + Base Layer
+                     // We always set it to ensure smooth transition to 0 opacity
+                     const glowShadow = `0 0 ${blur}px rgba(${color}, ${alpha * glowIntensity})`;
+                     
+                     gsap.set(visualTarget, {
+                         boxShadow: `${glowShadow}, ${baseShadow}`
+                     });
+                }
 
-            // 1. Current Item: Rolls UP from Center to Top (Exit)
-            tl.to(currentSection, {
-                y: `-${gap}vh`,      // Move up by gap
-                rotationX: rot,      // Tilt forward (+X)
-                scale: sc,           // Shrink
-                z: zDist,            // Move back
-                autoAlpha: 0.3,      // Kept partially visible (Fade out later)
-                transformOrigin: "center bottom", 
-                ease: scrollEase,        
-                duration: duration 
+                // Update Connector line if Date Pill
+                if (item.type === 'date') {
+                    const connLine = document.getElementById(`conn-line-${item.key}`);
+                    if (connLine && datePillRef) {
+                        // Use the already found ref
+                        let pillRadius = datePillRef.offsetWidth / 2;
+                        
+                        // Length = Distance - PillRadius
+                        // The entire item (pill + connector) is scaled by `finalScale`.
+                        // The Gap we need to cross in World Space is: RING_X_OFFSET - (pillRadius * finalScale).
+                        // The Connector Line Width `w` will be visually scaled to `w * finalScale`.
+                        // So: w * finalScale = RING_X_OFFSET - (pillRadius * finalScale).
+                        // w = (RING_X_OFFSET / finalScale) - pillRadius.
+                        
+                        let safeScale = finalScale < 0.1 ? 0.1 : finalScale; // Prevent divide by zero/huge numbers
+                        let length = (RING_X_OFFSET / safeScale) - pillRadius; 
+                        
+                        // Prevent negative length or huge spikes
+                        if (length < 0) length = 0;
+                        if (length > 2000) length = 2000; // Cap at reasonable visual limit?
+
+                        gsap.set(connLine, {
+                            width: length,
+                            rotationX: -rotateX // Counter-rotate to keep flat and horizontal
+                        });
+                    }
+                }
             });
-
-            // 2. Next Item: Rolls UP from Bottom (Peek) to Center (Active)
-            if (i < timelineItems.length - 1) {
-                const nextSection = sections[i + 1];
-                if (nextSection) {
-                    tl.to(nextSection, 
-                        { 
-                            y: 0, 
-                            rotationX: 0, 
-                            scale: 1, 
-                            z: 0, 
-                            autoAlpha: 1, 
-                            ease: scrollEase, 
-                            duration: duration 
-                        },
-                        "<" 
-                    );
-                }
-            }
-
-            // 3. Next-Next Item: Rolls UP from Deep Bottom (Hidden) to Bottom (Peek)
-            if (i < timelineItems.length - 2) {
-                const nextNextSection = sections[i + 2];
-                const itemAfterNext = timelineItems[i + 2];
-                const itemNext = timelineItems[i + 1];
-                
-                // It needs to end up at the gap distance from the NEW center (valleys are relative)
-                const nextGap = getSpacing(itemNext, itemAfterNext);
-                
-                // Calculate target state for the "Peek" position
-                const nextRot = -nextGap * DEG_PER_VH;
-                const nextSc = 1 - (nextGap * SCALE_PER_VH);
-                const nextZ = -nextGap * Z_PER_VH;
-
-                if (nextNextSection) {
-                    tl.fromTo(nextNextSection, 
-                        { 
-                            y: `${nextGap + 60}vh`, // Start MUCH further down (Move further)
-                            rotationX: nextRot - 10, 
-                            scale: nextSc - 0.1, 
-                            z: nextZ - 30, // Less aggressive depth push
-                            autoAlpha: 0 
-                        },
-                        {
-                            y: `${nextGap}vh`,    // Land exactly at gap
-                            rotationX: nextRot,   // Land exactly at calculated tilt
-                            scale: nextSc,        // Land exactly at calculated scale
-                            z: nextZ,             // Land exactly at calculated z
-                            autoAlpha: 0.5,
-                            ease: scrollEase,
-                            duration: duration
-                        }, "<");
-                }
-            }
-            
-            // 4. Previous Item: Rolls UP from Top (Exit) to Deep Top (Hidden)
-            if (i > 0) {
-                 const prevSection = sections[i-1];
-                 if(prevSection) {
-                     // Move further UP relative to current pos
-                     // We just fade it out and push it further along the curve
-                     tl.to(prevSection, {
-                         y: `-=${gap + 20}vh`, // Move FURTHER up (Accelerate away)
-                         rotationX: rot + 10, 
-                         scale: sc - 0.1,    
-                         z: zDist - 30,       
-                         autoAlpha: 0,        // Fade out completely HERE (Later)
-                         ease: scrollEase,
-                         duration: duration
-                     }, "<");
-                 }
-            }
-        });
-
-        // Connector Animation Loop
-        const updateConnectors = () => {
-             const containerRect = containerRef.current?.getBoundingClientRect();
-             if (!containerRect) return;
-
-             dateRefs.current.forEach((dateEl, i) => {
-                 if (!dateEl) return; // Only exists for 'date' items
-                 const dotEl = dotRefs.current[i];
-                 const lineEl = lineRefs.current[i];
-                 if (!dotEl || !lineEl) return;
-
-                 const rect = dateEl.getBoundingClientRect();
-                 
-                 // Calculate coordinates relative to the Container, not Viewport
-                 // This allows proper functioning regardless of content above/below or pinning state
-                 const localY = (rect.top - containerRect.top) + (rect.height / 2);
-                 const localLeft = rect.left - containerRect.left;
-
-                 // t is ratio of vertical position within the viewport/container height
-                 // Since container is 100vh, localY gives us the position relative to the "screen" frame of the container
-                 const t = Math.max(0, Math.min(1, localY / window.innerHeight));
-                 
-                 const curveX = getCurveX(t); 
- 
-                 // Update positions using Local Coordinates (dotEl is absolute inside relative container)
-                 dotEl.style.transform = `translate(${curveX}px, ${localY}px) translate(-50%, -50%)`;
-                 
-                 // Calculate line length to reach date pill with a small gap
-                 const distToDate = localLeft - curveX;
-                 const extendedLength = distToDate * 0.9; // 20px gap prevents touching
-                 
-                 lineEl.style.width = `${Math.max(0, extendedLength)}px`;
-                 lineEl.style.transform = `translate(${curveX}px, ${localY}px)`;
-                 
-                 // Sync opacity with parent section
-                 // Use inline style set by GSAP, fallback to 1 if not set (default visible)
-                 const currentSection = sectionRefs.current[i];
-                 // Force visibility to visible once positioned, assuming section is visible
-                 const sectionOpacity = currentSection?.style.opacity || (i === 0 ? "1" : "0"); 
-                 
-                 lineEl.style.opacity = sectionOpacity;
-                 dotEl.style.opacity = sectionOpacity;
-                 
-                 // Ensure visibility is turned on after first positioning (fixes flash)
-                 dotEl.style.visibility = "visible";
-                 lineEl.style.visibility = "visible";
-             });
         };
 
-        // Run once immediately to set initial positions before frame paint
-        updateConnectors();
+        // Create a Ghost Scroll trigger to drive the animation
+        // The total height of the page needs to accommodate the items.
+        // We set document body height or a spacer height.
+        
+        ScrollTrigger.create({
+            trigger: document.body, // or a specific spacer
+            start: "top top",
+            end: "bottom bottom", 
+            scrub: true, // Tied to physics
+            // Snap Removed in favor of CSS Scroll Snap for "one-step" feel
+            onUpdate: (self) => {
+                // We can use self.scroll() or just generic listener
+                requestAnimationFrame(updateItems);
+            }
+        });
 
-        gsap.ticker.add(updateConnectors);
-        return () => gsap.ticker.remove(updateConnectors);
+        updateItems(); // Initial call
+        window.addEventListener('scroll', updateItems); // Fallback/Additional
 
-    }, { scope: containerRef });
+        return () => {
+             window.removeEventListener('scroll', updateItems);
+             ScrollTrigger.getAll().forEach(t => t.kill());
+        };
+
+    }, [items, totalDistance, radius]);
 
     return (
-        <div style={{ width: '100%', minHeight: '100vh' }}>
-            <div className={styles.timeline} ref={containerRef}>
-                {/* Fixed Background Curve Container */}
-                <div className={styles.curveContainer} style={{ width: '250px' }}>
-                <svg className={styles.curveSvg} viewBox="0 0 250 1000" preserveAspectRatio="none">
-                     <defs>
-                        <linearGradient id="fade-gradient" x1="0" x2="0" y1="0" y2="1">
-                            <stop offset="0%" stopColor="white" stopOpacity="0"/>
-                            <stop offset="20%" stopColor="white" stopOpacity="0.5"/>
-                            <stop offset="80%" stopColor="white" stopOpacity="0.5"/>
-                            <stop offset="100%" stopColor="white" stopOpacity="0"/>
-                        </linearGradient>
-                        <mask id="fade-mask">
-                            <rect x="0" y="0" width="100%" height="100%" fill="url(#fade-gradient)"/>
-                        </mask>
-                    </defs>
-                    {/* Curve Path */}
-                    <path d="M 120,0 Q 40,500 120,1000" stroke="white" strokeWidth="2" fill="none" mask="url(#fade-mask)" vectorEffect="non-scaling-stroke" />
-                </svg>
-                {/* Connectors - Only for Date Items */}
-                {timelineItems.map((item, i) => (
-                    item.type === 'date' ? (
-                        <React.Fragment key={`connector-${i}`}>
-                            <div 
-                                ref={el => { dotRefs.current[i] = el; }} 
-                                className={styles.connectorDot}
-                                style={{position: 'absolute', top: 0, left: 0, visibility: 'hidden'}} 
-                            />
-                            <div 
-                                ref={el => { lineRefs.current[i] = el; }} 
-                                className={styles.connectorLine}
-                                style={{position: 'absolute', top: 0, left: 0, visibility: 'hidden'}} 
-                            />
-                        </React.Fragment>
-                    ) : null
+        <>
+            {/* Height Spacer to allow scrolling with CSS Snap Points */}
+            <div style={{ height: `calc(${totalDistance}px + 100vh)`, position: 'absolute', top: 0, width: '100%' }} className={styles.scrollTrack}>
+                {items.map(item => (
+                    <div 
+                        key={`snap-${item.key}`}
+                        style={{
+                            position: 'absolute',
+                            top: `${item.pos}px`,
+                            left: 0,
+                            width: '100%',
+                            height: '1px',
+                            scrollSnapAlign: 'start', // Aligns this div's top (item.pos) to viewport top (scrollY)
+                            pointerEvents: 'none',
+                        }}
+                    />
                 ))}
             </div>
 
-            {timelineItems.map((item, index) => (
-                <div 
-                    key={item.key} 
-                    className={styles.section}
-                    ref={el => { sectionRefs.current[index] = el; }}
-                >
-                    <div className={styles.sectionContent}>
-                        {item.type === 'date' ? (
-                           <div 
-                                className={styles.date}
-                                ref={el => { dateRefs.current[index] = el; }}
-                            >
-                                📆 {item.content}
-                            </div>
-                        ) : (
-                            <div className={styles.row} style={{ width: '100%', margin: 0, justifyContent: 'flex-start' }}>
-                                <div className={styles.col} style={{ width: '100%', maxWidth: '450px', margin: 0 }}>
-                                    <Link href={item.data.link || "#"} className={styles.cardLink}>
-                                        <div className={styles.card}>
-                                            <div className={styles.thumbnailStub}>
-                                                <span className={styles.placeholderIcon}>🖼️</span>
-                                            </div>
-                                            <div className={styles.contentWrapper}>
-                                                <div className={styles.title}>
-                                                    {item.data.title}
-                                                </div>
-                                                <div className={styles.content}>
-                                                    {item.data.description}
-                                                </div>
-                                                <div className={styles.footer}>
-                                                    {item.data.tags.join(", ")}
-                                                </div>
+            <div className={styles.container} ref={containerRef}>
+                <div className={styles.viewport} ref={viewportRef}>
+                    {/* 3D Ring Element */}
+                    <div 
+                        className={styles.timelineRing}
+                        style={{
+                            width: radius * 2, // Diameter = 2 * Radius to match the wheel curvature exactly
+                            height: radius * 2,
+                            // Ring Geometry:
+                            // Rotated 90deg Y to be a vertical circle loop.
+                            // Centered at Z = -radius (center of the timeline wheel).
+                            // This puts the front edge at Z = 0 (focus plane).
+                            // Translated X to sit to the left of the content.
+                            transform: `translate(-50%, -50%) translateX(-${RING_X_OFFSET}px) translateZ(${-radius}px) rotateY(90deg)`
+                        }}
+                    />
+
+                    {items.map((item) => (
+                        <div 
+                            key={item.key} 
+                            id={item.key}
+                            className={styles.item}
+                            // Base positioning centered, then we transform
+                        >
+                            {item.type === 'date' ? (
+                                <div className={styles.datePill}>
+                                    {item.content}
+                                    {/* Connector */}
+                                    <div className={styles.connector}>
+                                        <div className={styles.connectorLine} id={`conn-line-${item.key}`}>
+                                            <div className={styles.connectorDot} />
+                                        </div>
+                                    </div>
+                                </div>
+                            ) : (
+                                item.data.link ? (
+                                    <Link href={item.data.link} className={styles.projectCardLink}>
+                                        <div className={styles.projectCard}>
+                                            <h3>{item.data.title}</h3>
+                                            <p>{item.data.description}</p>
+                                            <div className={styles.tags}>
+                                                {item.data.tags?.map((t: string) => (
+                                                    <span key={t}>{t}</span>
+                                                ))}
                                             </div>
                                         </div>
                                     </Link>
-                                </div>
-                            </div>
-                        )}
-                    </div>
+                                ) : (
+                                    <div className={styles.projectCard}>
+                                        <h3>{item.data.title}</h3>
+                                        <p>{item.data.description}</p>
+                                        <div className={styles.tags}>
+                                            {item.data.tags?.map((t: string) => (
+                                                <span key={t}>{t}</span>
+                                            ))}
+                                        </div>
+                                    </div>
+                                )
+                            )}
+                        </div>
+                    ))}
                 </div>
-            ))}
             </div>
-        </div>
+        </>
     );
 }
