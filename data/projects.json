@@ -1,0 +1,63 @@
+[
+  {
+    "period": "2025 - Today",
+    "projects": [
+      {
+        "title": "Master Thesis",
+        "description": "Image Data Curation in the Agricultural Domain: Using Deep Neural Networks and Image-Text-Alignment.",
+        "tags": ["ML", "Data Science", "Transformer"],
+        "link": "/projects/master-thesis"
+      }
+    ]
+  },
+  {
+    "period": "2022 - 2023",
+    "projects": [
+      {
+        "title": "Telematikprojekt",
+        "description": "Detecting radioactive radiation with an autonomous Drone and displaying it.",
+        "tags": ["Drone", "Automation", "Sensors"],
+        "link": "/projects/telematik"
+      }
+    ]
+  },
+  {
+    "period": "2021",
+    "projects": [
+      {
+        "title": "Bachelors Thesis",
+        "description": "Lane detection with a 3D camera in a Robotic Operating System with Open Computer Vision.",
+        "tags": ["Image Recognition", "Lane Detection", "ROS"],
+        "link": "/projects/bachelor-thesis"
+      }
+    ]
+  },
+  {
+    "period": "2018",
+    "projects": [
+      {
+        "title": "NaoLino - Object detection",
+        "description": "Detecting different selected objects with the NAO robot and naming and pointing at them.",
+        "tags": ["Robotics", "Object Detection"],
+        "link": "/projects/naolino"
+      }
+    ]
+  },
+  {
+    "period": "2017",
+    "projects": [
+      {
+         "title": "Ronaldo - Detecting and kicking a ball",
+         "description": "Detecting a red ball with a modified NIBO 2, aiming at the ball and kicking it with the robot.",
+         "tags": ["Robotics", "Image Recognition"],
+         "link": "/projects/ronaldo"
+      },
+      {
+         "title": "Parkourmeister - My First Robotics Project",
+         "description": "The goal of this project was to navigate a labyrinth like parcour and exiting it using a NIBO 2 robot.",
+         "tags": ["Robotics", "Navigation"],
+         "link": "/projects/parkourmeister"
+      }
+    ]
+  }
+]
