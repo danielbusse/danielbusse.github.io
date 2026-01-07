@@ -21,10 +21,17 @@
 
     .intro {
         max-width: 600px;
-        margin-bottom: 40px;
+        margin-bottom: 20px; // Reduced from 40px
         justify-content: center;
         text-align: center;
         
+        // Snap behavior for the intro
+        scroll-snap-align: start;
+        min-height: 30vh; // Reduced from 100vh to remove huge gap
+        padding-top: 5vh; // Add some top padding instead to vertically center content
+        display: flex;
+        flex-direction: column;
+
         h1 {
             text-align: center;
             font-size: 6em;
@@ -36,6 +43,66 @@
             margin: 0px;
             margin-bottom: 20px;
         }
+
+        .scrollHint {
+            margin-top: 10px;
+            display: flex;
+            justify-content: center;
+            width: 100%;
+
+            .circle {
+                width: 50px;
+                height: 50px;
+                border: 2px solid rgba(255, 255, 255, 0.2);
+                border-radius: 50%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                color: rgba(255, 255, 255, 0.7);
+                cursor: pointer;
+                transition: border-color 0.3s ease, color 0.3s ease;
+
+                &:hover {
+                    border-color: rgba(255, 255, 255, 0.6);
+                    color: rgba(255, 255, 255, 1);
+                }
+
+                svg {
+                    animation: bounce 3s infinite ease-in-out;
+                }
+            }
+        }
     }
+}
+
+@keyframes bounce {
+    0%, 20%, 50%, 80%, 100% {
+        transform: translateY(0);
+    }
+    40% {
+        transform: translateY(6px);
+    }
+    60% {
+        transform: translateY(3px);
+    }
+    // Wait... that's standard gravity bounce. User wants double tap.
+    
+    // Resetting for double-tap logic:
+    // 0 -> 0 (Start)
+    // 10 -> 6 (Down 1)
+    // 20 -> 0 (Up 1)
+    // 30 -> 6 (Down 2)
+    // 40 -> 0 (Up 2)
+    // 100 -> 0 (Wait)
+}
+
+// Redefining cleanly to avoid comments in output CSS affecting logic
+@keyframes bounce {
+    0% { transform: translateY(0); }
+    10% { transform: translateY(6px); }
+    20% { transform: translateY(0); }
+    30% { transform: translateY(6px); }
+    40% { transform: translateY(0); }
+    100% { transform: translateY(0); }
 }
 

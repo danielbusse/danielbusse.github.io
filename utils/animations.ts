@@ -184,3 +184,90 @@ export const animateWave = (target: gsap.TweenTarget, delay: number = 0) => {
     return tl;
 };
 
+/**
+ * Plays a specific animation on an element
+ * @param element The target element
+ * @param type The animation type (pulse, fly, drive, wave, bounce, jump)
+ */
+export function playEmojiAnimation(element: HTMLElement, type: string) {
+    if (!element) return;
+
+    // Kill any running animations on this element
+    gsap.killTweensOf(element);
+    
+    // Check if animation exists in our registry
+    // If not, play fallback 'wiggle'
+    switch (type) {
+        case 'pulse':
+            gsap.to(element, { 
+                scale: 1.2, 
+                duration: 0.4, 
+                yoyo: true, 
+                repeat: 3, 
+                ease: "power2.inOut",
+                onComplete: () => { gsap.to(element, { scale: 1, duration: 0.2 }); }
+            });
+            break;
+        case 'fly':
+            const flyTl = gsap.timeline();
+            flyTl.to(element, { y: -10, rotation: -10, duration: 0.3, ease: "power1.in" })
+                 .to(element, { x: 10, y: -25, rotation: 10, duration: 0.7, ease: "linear" })
+                 .to(element, { x: -8, y: -15, rotation: -10, scale: 1.1, duration: 0.7, ease: "linear" })
+                 .to(element, { x: 0, y: 0, rotation: 0, scale: 1, duration: 0.6, ease: "power2.out" });
+            break;
+        case 'drive':
+             gsap.to(element, { 
+                x: -20, 
+                duration: 0.5, 
+                ease: "power1.in",
+                onComplete: () => {
+                    gsap.set(element, { x: 20, opacity: 0 }); // Teleport back
+                    gsap.to(element, { x: 0, opacity: 1, duration: 0.3, ease: "power1.out" });
+                }
+            });
+            break;
+        case 'wave':
+            gsap.to(element, { 
+                rotation: 30, 
+                duration: 0.2, 
+                yoyo: true, 
+                repeat: 3, 
+                ease: "linear",
+                onComplete: () => { gsap.to(element, { rotation: 0, duration: 0.2 }); }
+            });
+            break;
+        case 'bounce':
+            gsap.to(element, { 
+                y: -20, 
+                duration: 0.3, 
+                yoyo: true, 
+                repeat: 3, 
+                ease: "circ.out",
+                onComplete: () => { gsap.to(element, { y: 0, duration: 0.2 }); }
+            });
+            break;
+        case 'jump':
+             gsap.to(element, { 
+                y: -30, 
+                scaleY: 0.8,
+                duration: 0.4, 
+                yoyo: true, 
+                repeat: 1, 
+                ease: "power2.out",
+                onComplete: () => { gsap.to(element, { y: 0, scaleY: 1, duration: 0.2 }); }
+            });
+            break;
+        default:
+            // Default "Wiggle"
+            gsap.to(element, { 
+                x: 4, 
+                duration: 0.1, 
+                yoyo: true, 
+                repeat: 5, 
+                ease: "linear",
+                onComplete: () => { gsap.to(element, { x: 0, duration: 0.1 }); }
+            });
+            break;
+    }
+}
+

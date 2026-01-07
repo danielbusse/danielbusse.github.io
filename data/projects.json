@@ -6,7 +6,9 @@
         "title": "Master Thesis",
         "description": "Image Data Curation in the Agricultural Domain: Using Deep Neural Networks and Image-Text-Alignment.",
         "tags": ["ML", "Data Science", "Transformer"],
-        "link": "/projects/master-thesis"
+        "link": "/projects/master-thesis",
+        "emoji": "🧠",
+        "animation": "pulse"
       }
     ]
   },
@@ -17,7 +19,9 @@
         "title": "Telematikprojekt",
         "description": "Detecting radioactive radiation with an autonomous Drone and displaying it.",
         "tags": ["Drone", "Automation", "Sensors"],
-        "link": "/projects/telematik"
+        "link": "/projects/telematik",
+        "emoji": "🚁",
+        "animation": "fly"
       }
     ]
   },
@@ -28,7 +32,9 @@
         "title": "Bachelors Thesis",
         "description": "Lane detection with a 3D camera in a Robotic Operating System with Open Computer Vision.",
         "tags": ["Image Recognition", "Lane Detection", "ROS"],
-        "link": "/projects/bachelor-thesis"
+        "link": "/projects/bachelor-thesis",
+        "emoji": "🚗",
+        "animation": "drive"
       }
     ]
   },
@@ -39,7 +45,9 @@
         "title": "NaoLino - Object detection",
         "description": "Detecting different selected objects with the NAO robot and naming and pointing at them.",
         "tags": ["Robotics", "Object Detection"],
-        "link": "/projects/naolino"
+        "link": "/projects/naolino",
+        "emoji": "🤖",
+        "animation": "wave"
       }
     ]
   },
@@ -50,13 +58,17 @@
          "title": "Ronaldo - Detecting and kicking a ball",
          "description": "Detecting a red ball with a modified NIBO 2, aiming at the ball and kicking it with the robot.",
          "tags": ["Robotics", "Image Recognition"],
-         "link": "/projects/ronaldo"
+         "link": "/projects/ronaldo",
+         "emoji": "⚽",
+         "animation": "bounce"
       },
       {
          "title": "Parkourmeister - My First Robotics Project",
          "description": "The goal of this project was to navigate a labyrinth like parcour and exiting it using a NIBO 2 robot.",
          "tags": ["Robotics", "Navigation"],
-         "link": "/projects/parkourmeister"
+         "link": "/projects/parkourmeister",
+         "emoji": "🏃",
+         "animation": "jump"
       }
     ]
   }

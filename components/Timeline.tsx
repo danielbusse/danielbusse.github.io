@@ -4,9 +4,11 @@ import React, { useRef, useMemo, useEffect, useState } from "react";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { useLenis } from 'lenis/react';
 import projectsData from "@/data/projects.json";
 import styles from "./Timeline.module.scss";
 import Link from "next/link";
+import { playEmojiAnimation } from "@/utils/animations";
 
 // Register GSAP plugins
 if (typeof window !== "undefined") {
@@ -14,8 +16,9 @@ if (typeof window !== "undefined") {
 }
 
 interface TimelineItem {
-    type: 'date' | 'project';
+    type: 'date' | 'project' | 'scrollToTop';
     content?: string;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     data?: any;
     key: string;
     index: number;
@@ -49,6 +52,7 @@ export default function Timeline({ radius = 800, itemBaseHeight = 150 }: Timelin
     const items = useMemo(() => {
         if (typeof window === "undefined" && windowHeight === 0) return []; // partial hydration guard
 
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const tempItems: any[] = [];
         
         projectsData.forEach((section) => {
@@ -70,14 +74,24 @@ export default function Timeline({ radius = 800, itemBaseHeight = 150 }: Timelin
             });
         });
 
+        // Add Scroll To Top Item
+        tempItems.push({
+            type: 'scrollToTop',
+            content: null,
+            key: 'scroll-to-top',
+            data: null
+        });
+
         // Constants for logic
         const H_DATE = 42; // px approx
         const H_CARD = 240; // px approx
-        
+        const H_SCROLL_TOP = 60; // px approx
+
         // VH gaps
         const VH_DATE_PROJ = 0.05; // 5vh
         const VH_PROJ_PROJ = 0.05; // 5vh
         const VH_PROJ_DATE = 0.15; // 15vh
+        const VH_PROJ_TOP = 0.15; // 15vh for the last item
         const VH = windowHeight || 1080; // Fallback
 
         // specific gap logic requested by user
@@ -89,14 +103,15 @@ export default function Timeline({ radius = 800, itemBaseHeight = 150 }: Timelin
             const prev = arr[i - 1];
             
             if (prev) {
-                const hPrev = prev.type === 'date' ? H_DATE : H_CARD;
-                const hCurr = item.type === 'date' ? H_DATE : H_CARD;
+                const hPrev = prev.type === 'date' ? H_DATE : (prev.type === 'project' ? H_CARD : H_SCROLL_TOP);
+                const hCurr = item.type === 'date' ? H_DATE : (item.type === 'project' ? H_CARD : H_SCROLL_TOP);
                 
                 let vhGap = 0;
                 
                 if (prev.type === 'date' && item.type === 'project') vhGap = VH_DATE_PROJ;
                 else if (prev.type === 'project' && item.type === 'project') vhGap = VH_PROJ_PROJ;
                 else if (prev.type === 'project' && item.type === 'date') vhGap = VH_PROJ_DATE;
+                else if (item.type === 'scrollToTop') vhGap = VH_PROJ_TOP;
                 
                 // Gap logic:
                 // We want the space between standard DOM flow elements to include the elements themselves?
@@ -149,16 +164,33 @@ export default function Timeline({ radius = 800, itemBaseHeight = 150 }: Timelin
     // Config for Ring Position
     const RING_X_OFFSET = 300; // Distance from center of screen to the ring plane
 
-    // Enable CSS Scroll Snap on the document
+    // Enable CSS Scroll Snap?
+    // User requested configurable proximity. CSS 'proximity' is browser-defined (usually very strict).
+    // We will use GSAP's custom snap logic instead to define a specific pixel threshold.
     useEffect(() => {
-        document.documentElement.style.scrollSnapType = 'y proximity'; // 'proximity' is less aggressive than 'mandatory', allows free scroll but catches alignment
-        // Trying 'mandatory' for strict one-step feel
-        document.documentElement.style.scrollSnapType = 'y mandatory'; 
+        // Disable CSS snap to let GSAP handle it
+        document.documentElement.style.scrollSnapType = ''; 
         
         return () => {
             document.documentElement.style.scrollSnapType = '';
         };
     }, []);
+
+    const wrapperRef = useRef<HTMLDivElement>(null);
+    const lenis = useLenis();
+
+    // Scroll Restoration Logic
+    useEffect(() => {
+        // We only restore if we have a saved position from a previous interaction
+        const savedPos = sessionStorage.getItem('timeline_scroll_pos');
+        if (savedPos && lenis) {
+            const pos = parseFloat(savedPos);
+            // Restore immediately
+            lenis.scrollTo(pos, { immediate: true });
+            // Clear it so we don't restore it on next unrelated visit
+            sessionStorage.removeItem('timeline_scroll_pos');
+        }
+    }, [lenis]); // Dependency on lenis ensures we run once we have the instance
 
     useGSAP(() => {
         if (!items.length) return;
@@ -167,12 +199,28 @@ export default function Timeline({ radius = 800, itemBaseHeight = 150 }: Timelin
         // The scrollable distance should map to the totalDistance of items
         
         const updateItems = () => {
-            const scrollY = window.scrollY; // Or use a specific scroller if not window
+            const scrollY = window.scrollY; 
+            // Calculate offset relative to the timeline wrapper start
+            // We want '0' progress when the top of the timeline wrapper hits the top of the viewport
+            // But actually, we want the timeline to START animating immediately? 
+            // No, standard sticky behavior:
+            // 1. User scrolls down page. Wrapper enters viewport. Container is at top of Wrapper (relative).
+            //    Wait, CSS Sticky keeps Container at top of Viewport once Wrapper hits top.
+            //    Before that, Container is at top of Wrapper.
             
-            const viewportCheck = window.innerHeight;
+            // MATH:
+            // The item positions 'item.pos' are generated starting from 0.
+            // We want item 0 to be centered when we have scrolled enough to 'focus' it.
+            // If the wrapper starts at Y=Offset.
+            // When Window ScrollY = Offset, 
+            // The Container is Sticky at Top.
+            // We want Item 0 (pos=0) to be centered.
+            // So relativeScroll = (scrollY - Offset).
+            // distance = item.pos - relativeScroll.
             
-            const scrollProgress = scrollY; // Pixel for Pixel mapping?
-            
+            const offset = wrapperRef.current?.offsetTop || 0;
+            const scrollProgress = Math.max(0, scrollY - offset); // CLAMP to 0 to freeze animation until sticky
+
             // Loop through items and update their transform
             items.forEach((item, i) => {
                 const el = document.getElementById(item.key);
@@ -238,11 +286,12 @@ export default function Timeline({ radius = 800, itemBaseHeight = 150 }: Timelin
                 // Find visual target (Date Pill or Project Card)
                 const datePillRef = el.querySelector(`.${styles.datePill}`) as HTMLElement;
                 const projectCardRef = el.querySelector(`.${styles.projectCard}`) as HTMLElement;
-                const visualTarget = datePillRef || projectCardRef;
+                const scrollToTopRef = el.querySelector(`.${styles.scrollToTopBtn}`) as HTMLElement;
+                const visualTarget = datePillRef || projectCardRef || scrollToTopRef;
 
                 if (visualTarget) {
                      // 0 angle = max glow. Falloff faster than opacity.
-                     const glowIntensity = Math.max(0, 1 - (absAngle * 2.5)); 
+                     const intensity = Math.max(0, 1 - (absAngle * 2.5)); 
                      
                      // Define visual params
                      const isDate = !!datePillRef;
@@ -250,6 +299,10 @@ export default function Timeline({ radius = 800, itemBaseHeight = 150 }: Timelin
                      const alpha = isDate ? 0.6 : 0.4;
                      const blur = isDate ? 15 : 25; // px
                      
+                     // Calculate dynamic background opacity
+                     // Base: 0.45. Max: 0.75. Range: 0.3.
+                     const bgAlpha = 0.45 + (0.1 * intensity);
+
                      // Match CSS base shadows
                      const baseShadow = isDate 
                         ? '0 4px 6px rgba(0,0,0,0.1)' 
@@ -257,10 +310,11 @@ export default function Timeline({ radius = 800, itemBaseHeight = 150 }: Timelin
                      
                      // Construct Shadow String: Glow Layer + Base Layer
                      // We always set it to ensure smooth transition to 0 opacity
-                     const glowShadow = `0 0 ${blur}px rgba(${color}, ${alpha * glowIntensity})`;
+                     const glowShadow = `0 0 ${blur}px rgba(${color}, ${alpha * intensity})`;
                      
                      gsap.set(visualTarget, {
-                         boxShadow: `${glowShadow}, ${baseShadow}`
+                         boxShadow: `${glowShadow}, ${baseShadow}`,
+                         "--card-alpha": bgAlpha
                      });
                 }
 
@@ -269,7 +323,7 @@ export default function Timeline({ radius = 800, itemBaseHeight = 150 }: Timelin
                     const connLine = document.getElementById(`conn-line-${item.key}`);
                     if (connLine && datePillRef) {
                         // Use the already found ref
-                        let pillRadius = datePillRef.offsetWidth / 2;
+                        const pillRadius = datePillRef.offsetWidth / 2;
                         
                         // Length = Distance - PillRadius
                         // The entire item (pill + connector) is scaled by `finalScale`.
@@ -278,7 +332,7 @@ export default function Timeline({ radius = 800, itemBaseHeight = 150 }: Timelin
                         // So: w * finalScale = RING_X_OFFSET - (pillRadius * finalScale).
                         // w = (RING_X_OFFSET / finalScale) - pillRadius.
                         
-                        let safeScale = finalScale < 0.1 ? 0.1 : finalScale; // Prevent divide by zero/huge numbers
+                        const safeScale = finalScale < 0.1 ? 0.1 : finalScale; // Prevent divide by zero/huge numbers
                         let length = (RING_X_OFFSET / safeScale) - pillRadius; 
                         
                         // Prevent negative length or huge spikes
@@ -299,47 +353,67 @@ export default function Timeline({ radius = 800, itemBaseHeight = 150 }: Timelin
         // We set document body height or a spacer height.
         
         ScrollTrigger.create({
-            trigger: document.body, // or a specific spacer
+            trigger: wrapperRef.current, // Target the wrapper, not body
             start: "top top",
             end: "bottom bottom", 
             scrub: true, // Tied to physics
-            // Snap Removed in favor of CSS Scroll Snap for "one-step" feel
+            
+            // Custom Snap Logic for controlled "Proximity"
+            snap: {
+                snapTo: (progress, self) => {
+                    // 1. Setup
+                    const snapPoints = items.map(item => item.pos / totalDistance);
+                    const PROXIMITY_THRESHOLD_PX = 150; // <--- SENSITIVITY
+                    
+                    // 2. Find closest point
+                    let closest = snapPoints[0];
+                    let minDiff = Infinity;
+                    
+                    for(const p of snapPoints) {
+                        const diff = Math.abs(p - progress);
+                        if(diff < minDiff) {
+                            minDiff = diff;
+                            closest = p;
+                        }
+                    }
+
+                    const distanceToClosestInPx = minDiff * totalDistance;
+                    
+                    if (distanceToClosestInPx < PROXIMITY_THRESHOLD_PX) {
+                        return closest; 
+                    } else {
+                        return progress; 
+                    }
+                },
+                duration: { min: 0.1, max: 0.3 }, 
+                delay: 0.1, 
+                ease: "power3.out" 
+            },
+            
             onUpdate: (self) => {
-                // We can use self.scroll() or just generic listener
-                requestAnimationFrame(updateItems);
+                // Ticker handles updates, no need for onUpdate callback to render
             }
         });
 
-        updateItems(); // Initial call
-        window.addEventListener('scroll', updateItems); // Fallback/Additional
+        // Use GSAP Ticker for smooth, synchronized updates independent of scroll event frequency
+        gsap.ticker.add(updateItems);
+        updateItems(); 
 
         return () => {
-             window.removeEventListener('scroll', updateItems);
+             gsap.ticker.remove(updateItems);
              ScrollTrigger.getAll().forEach(t => t.kill());
         };
 
     }, [items, totalDistance, radius]);
 
     return (
-        <>
-            {/* Height Spacer to allow scrolling with CSS Snap Points */}
-            <div style={{ height: `calc(${totalDistance}px + 100vh)`, position: 'absolute', top: 0, width: '100%' }} className={styles.scrollTrack}>
-                {items.map(item => (
-                    <div 
-                        key={`snap-${item.key}`}
-                        style={{
-                            position: 'absolute',
-                            top: `${item.pos}px`,
-                            left: 0,
-                            width: '100%',
-                            height: '1px',
-                            scrollSnapAlign: 'start', // Aligns this div's top (item.pos) to viewport top (scrollY)
-                            pointerEvents: 'none',
-                        }}
-                    />
-                ))}
-            </div>
-
+        <div 
+            ref={wrapperRef} 
+            className={styles.wrapper} 
+            style={{ height: `calc(${totalDistance}px + 100vh)` }}
+        >
+            {/* Using GSAP managed snap, no CSS markers needed */}
+            
             <div className={styles.container} ref={containerRef}>
                 <div className={styles.viewport} ref={viewportRef}>
                     {/* 3D Ring Element */}
@@ -374,27 +448,72 @@ export default function Timeline({ radius = 800, itemBaseHeight = 150 }: Timelin
                                         </div>
                                     </div>
                                 </div>
+                            ) : item.type === 'scrollToTop' ? (
+                                <div 
+                                    className={`${styles.scrollToTopBtn}`}
+                                    onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+                                >
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                        <path d="M12 19V5M5 12l7-7 7 7"/>
+                                    </svg>
+                                </div>
                             ) : (
                                 item.data.link ? (
-                                    <Link href={item.data.link} className={styles.projectCardLink}>
+                                    <Link 
+                                        href={item.data.link} 
+                                        className={styles.projectCardLink}
+                                        onClick={() => {
+                                            // Save current scroll position before navigating
+                                            sessionStorage.setItem('timeline_scroll_pos', window.scrollY.toString());
+                                        }}
+                                        onMouseEnter={(e) => {
+                                            const target = e.currentTarget.querySelector(`.${styles.cardEmoji}`) as HTMLElement;
+                                            if (target && item.data.animation) {
+                                                playEmojiAnimation(target, item.data.animation);
+                                            }
+                                        }}
+                                    >
                                         <div className={styles.projectCard}>
-                                            <h3>{item.data.title}</h3>
+                                            <div className={styles.cardHeader}>
+                                                <h3>{item.data.title}</h3>
+                                                {item.data.emoji && (
+                                                    <div className={styles.cardEmoji}>
+                                                        {item.data.emoji}
+                                                    </div>
+                                                )}
+                                            </div>
                                             <p>{item.data.description}</p>
-                                            <div className={styles.tags}>
-                                                {item.data.tags?.map((t: string) => (
-                                                    <span key={t}>{t}</span>
-                                                ))}
+                                            <div className={styles.cardFooter}>
+                                                <div className={styles.tags}>
+                                                    {item.data.tags?.map((t: string) => (
+                                                        <span key={t}>{t}</span>
+                                                    ))}
+                                                </div>
+                                                <div className={styles.arrowIcon}>
+                                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                                        <path d="M5 12h14M12 5l7 7-7 7"/>
+                                                    </svg>
+                                                </div>
                                             </div>
                                         </div>
                                     </Link>
                                 ) : (
                                     <div className={styles.projectCard}>
-                                        <h3>{item.data.title}</h3>
+                                        <div className={styles.cardHeader}>
+                                            <h3>{item.data.title}</h3>
+                                            {item.data.emoji && (
+                                                <div className={styles.cardEmoji}>
+                                                    {item.data.emoji}
+                                                </div>
+                                            )}
+                                        </div>
                                         <p>{item.data.description}</p>
-                                        <div className={styles.tags}>
-                                            {item.data.tags?.map((t: string) => (
-                                                <span key={t}>{t}</span>
-                                            ))}
+                                        <div className={styles.cardFooter}>
+                                            <div className={styles.tags}>
+                                                {item.data.tags?.map((t: string) => (
+                                                    <span key={t}>{t}</span>
+                                                ))}
+                                            </div>
                                         </div>
                                     </div>
                                 )
@@ -403,6 +522,6 @@ export default function Timeline({ radius = 800, itemBaseHeight = 150 }: Timelin
                     ))}
                 </div>
             </div>
-        </>
+        </div>
     );
 }

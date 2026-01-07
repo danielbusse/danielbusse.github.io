@@ -6,16 +6,18 @@ import styles from './EditNote.module.scss'
 import { animateHandWriting } from '../utils/animations';
 
 export default function EditNote() {
-    const noteRef = useRef(null);
-    const textRef = useRef(null);
-    const cursorRef = useRef(null);
-    const iconRef = useRef(null);
+    const noteRef = useRef<HTMLDivElement>(null);
+    const textRef = useRef<HTMLSpanElement>(null);
+    const cursorRef = useRef<HTMLSpanElement>(null);
+    const iconRef = useRef<HTMLSpanElement>(null);
 
     const boldText = "Work in Progress:";
     const normalText = " Slow & steady updates.";
 
     useEffect(() => {
         const ctx = gsap.context(() => {
+            if (!textRef.current || !noteRef.current || !cursorRef.current) return;
+
             const tl = gsap.timeline({ delay: 1.2 });
             
             // Select only the normal text characters (exclude bold text and cursor)
