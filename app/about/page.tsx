@@ -55,7 +55,7 @@ export default function ProjectsPage() {
                         <div className={styles.gridItem}>
                             <h3>💼 Career & Experience</h3>
                             <p>
-                                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+                                During my studies, I have gained practical experience through internships and working student positions. I have worked for the university data center doploying and maintaining servers and services. I also worked for a engineering office developing solutions for RFID applications. During my bachelor thesis and beyond I worked for the Wildauer Maschinen Werke on lane detection algorithms using computer vision for Trucks in the scale of 14:1. My master Thesis has been conducted with John Deere focusing on the transfer of multimodal machine learning models into the agricultural domain. You can read my CV <a href="/cv" onClick={handleProjectClick}>here</a> and find some more of my projects <a href="/projects" onClick={handleProjectClick}>here</a>.
                             </p>
                         </div>
 
