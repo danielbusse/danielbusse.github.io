@@ -63,14 +63,32 @@ $backgrounds: (
     position: absolute;
     top: 50%;
     left: 50%;
-    border: 4px solid rgba(255, 255, 255, 0.15); // Subtle ring
+    // Instead of a border, we can use an SVG or gradient stroke trick?
+    // Using a conic or linear gradient on border isn't standard for depth fading on a 3D ring.
+    // However, the ring is a flat circle rotated 90deg.
+    // Its "top" is far away (z-depth), "bottom" is far away.
+    // "Right" is closest (front). "Left" is furthest (back).
+    
+    // Actually, based on rotateY(90deg):
+    // The circle lies in the Y-Z plane.
+    // 12 o'clock and 6 o'clock are at varying Y heights but constant Z? No.
+    // It's a standard circle. 
+    // We want the part of the circle at Z=0 (closest) to be opaque.
+    // The parts at Z= -2*Radius (furthest) to be transparent.
+    
+    border: 6px solid white; // Base color
     border-radius: 50%;
     pointer-events: none;
-    // Dimensions and transform will be set inline based on radius
     
-    // Mask to fade out top/bottom
-    -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 20%, black 80%, transparent 100%);
-    mask-image: linear-gradient(to bottom, transparent 0%, black 20%, black 80%, transparent 100%);
+    // Mask logic
+    // The ring is rotated 90deg Y.
+    // In its local coordinate system:
+    // If inverted (Left is front, Right is back?), swapping the gradient directions:
+    
+    -webkit-mask-image: linear-gradient(to left, transparent 40%, black 50%);
+    mask-image: linear-gradient(to left, transparent 40%, black 50%);
+    
+    opacity: 0.3; // Global translucency
 }
 
 .item {
@@ -112,7 +130,7 @@ $backgrounds: (
 .connectorLine {
     position: absolute;
     right: 0; // The right side of the line connects to the anchor (left edge of pill)
-    height: 1px;
+    height: 2px;
     background: linear-gradient(90deg, rgba(255,255,255,0.8) 0%, rgba(255,255,255,0.0) 100%);
     transform-origin: right center; // Pivot from the pill connection
     // width set by JS
@@ -120,8 +138,8 @@ $backgrounds: (
 
 .connectorDot {
     position: absolute;
-    width: 6px;
-    height: 6px;
+    width: 9px;
+    height: 9px;
     background: #fff;
     border-radius: 50%;
     box-shadow: 0 0 5px rgba(255,255,255,0.8);
@@ -155,9 +173,10 @@ $backgrounds: (
     cursor: pointer;
 
     &:hover {
-        background: rgba(0, 0, 0, 0.75); // Explicit high opacity on hover
+        // background: rgba(0, 0, 0, 0.75); // Explicit high opacity on hover
         // Remove color border since we are switching to emoji identity
         // border-color: var(--card-color, rgba(255, 255, 255, 0.4));
+        transform: translateY(-2px); // Slight lift instead of darkening
     }
 
     .cardHeader {

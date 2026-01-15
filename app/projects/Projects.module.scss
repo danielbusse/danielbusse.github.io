@@ -1,11 +1,6 @@
 .main {
     min-height: 100vh;
-    //background-image: url('/assets/1769725.jpg');
-    background-image: url('/assets/background3.png');
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-    background-attachment: fixed;
+    // Removed background-image properties to use next/image
 
     display: flex;
     flex-direction: column;
@@ -18,9 +13,29 @@
     color: rgb(219, 219, 219);
     font-family: var(--font-text);
     font-weight: 100;
+    position: relative; // Context for absolute children if any, though bg is fixed
+}
 
-    .intro {
-        max-width: 600px;
+.background {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 1;
+    pointer-events: none;
+}
+
+.overlay {
+    position: absolute;
+    inset: 0;
+    background-color: rgba(0, 0, 0, 0.2); // 20% dark overlay
+}
+
+.intro {
+    position: relative;
+    z-index: 2;
+    max-width: 600px;
         margin-bottom: 20px; // Reduced from 40px
         justify-content: center;
         text-align: center;
@@ -72,7 +87,6 @@
                 }
             }
         }
-    }
 }
 
 @keyframes bounce {

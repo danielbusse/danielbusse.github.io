@@ -8,6 +8,8 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 import Timeline from '@/components/Timeline';
 import EditNote from "@/components/EditNote";
+import Image from 'next/image';
+import background6 from '../assets/background6.png';
 
 import styles from './Projects.module.scss';
 
@@ -37,6 +39,20 @@ export default function About() {
     return (
         <ReactLenis root options={lenisOptions} ref={lenisRef}>
             <div className={styles.main} ref={container}>
+                <div className={styles.background}>
+                    <Image
+                        src={background6}
+                        alt="Background"
+                        placeholder="blur"
+                        fill
+                        quality={100}
+                        sizes="100vw"
+                        style={{
+                            objectFit: 'cover',
+                        }}
+                    />
+                    <div className={styles.overlay} />
+                </div>
                 <section className={styles.intro}>
                     <h1>
                         Selected Projects
@@ -55,7 +71,7 @@ export default function About() {
                     </div>
                 </section>
                 
-                <div id="timeline-start" style={{ width: '100%' }}>
+                <div id="timeline-start" style={{ width: '100%', position: 'relative', zIndex: 2 }}>
                     <Timeline />
                 </div>
             </div>

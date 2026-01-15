@@ -209,17 +209,17 @@ export default function Timeline({ radius = 800, itemBaseHeight = 150 }: Timelin
             //    Before that, Container is at top of Wrapper.
             
             // MATH:
-            // The item positions 'item.pos' are generated starting from 0.
-            // We want item 0 to be centered when we have scrolled enough to 'focus' it.
-            // If the wrapper starts at Y=Offset.
-            // When Window ScrollY = Offset, 
-            // The Container is Sticky at Top.
-            // We want Item 0 (pos=0) to be centered.
-            // So relativeScroll = (scrollY - Offset).
-            // distance = item.pos - relativeScroll.
+            // Calculate robust offset relative to document
+            const rect = wrapperRef.current?.getBoundingClientRect();
+            const scrollTop = window.scrollY || document.documentElement.scrollTop;
+            const offset = (rect?.top || 0) + scrollTop;
+
+            let scrollProgress = scrollTop - offset;
             
-            const offset = wrapperRef.current?.offsetTop || 0;
-            const scrollProgress = Math.max(0, scrollY - offset); // CLAMP to 0 to freeze animation until sticky
+            // CLAMPING Logic:
+            // 1. Min 0: First element stays focused until we scroll into the timeline.
+            // 2. Max totalDistance: Last element stays focused even if we scroll past (bottom padding).
+            scrollProgress = Math.max(0, Math.min(scrollProgress, totalDistance));
 
             // Loop through items and update their transform
             items.forEach((item, i) => {
@@ -410,7 +410,7 @@ export default function Timeline({ radius = 800, itemBaseHeight = 150 }: Timelin
         <div 
             ref={wrapperRef} 
             className={styles.wrapper} 
-            style={{ height: `calc(${totalDistance}px + 100vh)` }}
+            style={{ height: windowHeight ? `${totalDistance + windowHeight}px` : '200vh' }}
         >
             {/* Using GSAP managed snap, no CSS markers needed */}
             
