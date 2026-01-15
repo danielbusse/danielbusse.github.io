@@ -41,3 +41,6 @@ next-env.d.ts
 
 # assets
 /asset-editing/
+
+# out
+/out/
