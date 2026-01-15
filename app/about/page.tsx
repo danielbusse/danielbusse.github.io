@@ -8,6 +8,7 @@ import Image from 'next/image';
 import EditNote from "@/components/EditNote";
 import Button from "@/components/Button";
 import { animateWave, slideInOut } from '@/utils/animations';
+import background2 from '../assets/background2.png';
 
 import styles from './About.module.scss'
 
@@ -29,6 +30,19 @@ export default function ProjectsPage() {
     return (
         <ReactLenis root>
             <div className={styles.main}>
+                <div style={{ position: 'fixed', top: 0, left: 0, width: '100%', height: '100%', zIndex: -1 }}>
+                    <Image
+                        src={background2}
+                        alt="Background"
+                        placeholder="blur"
+                        fill
+                        quality={100}
+                        sizes="100vw"
+                        style={{
+                            objectFit: 'cover',
+                        }}
+                    />
+                </div>
                 <div className={styles.about}>
                     <EditNote />
                     

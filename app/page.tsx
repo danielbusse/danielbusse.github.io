@@ -13,6 +13,8 @@ import gsap from 'gsap';
 import { SplitText } from 'gsap/all';
 import { fadeInUp } from '../utils/animations';
 import Button from '@/components/Button';
+import Image from 'next/image';
+import background1 from './assets/background1.png';
 
 gsap.registerPlugin(SplitText)
 
@@ -35,6 +37,18 @@ export default function HomePage() {
   return (
     <ReactLenis root>
       <main className={styles.home} ref={container}>
+        <Image
+          src={background1}
+          alt="Background"
+          placeholder="blur"
+          fill
+          quality={100}
+          sizes="100vw"
+          style={{
+            objectFit: 'cover',
+            zIndex: -1
+          }}
+        />
         <div className={styles.hero}>
           <h1 className={styles.fancytitle} id="fancytitle">Hi, my name is</h1>
           <h1 className={styles.signature} id="signature">Daniel</h1>
