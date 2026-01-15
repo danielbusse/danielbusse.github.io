@@ -10,7 +10,6 @@
   },
   "dependencies": {
     "@gsap/react": "^2.1.2",
-    "@plaiceholder/next": "^3.0.0",
     "@react-pdf/renderer": "^4.3.2",
     "clsx": "^2.1.1",
     "framer-motion": "^12.23.26",
@@ -20,7 +19,6 @@
     "next": "^15.5.9",
     "next-view-transitions": "^0.3.5",
     "pdfjs-dist": "^5.4.530",
-    "placeholder": "^1.2.3",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-pdf": "^10.3.0",
