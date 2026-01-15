@@ -30,7 +30,7 @@ export default function ProjectsPage() {
     return (
         <ReactLenis root>
             <div className={styles.main}>
-                <div style={{ position: 'fixed', top: 0, left: 0, width: '100%', height: '100%', zIndex: -1 }}>
+                <div style={{ position: 'fixed', top: 0, left: 0, width: '100%', height: '100%' }}>
                     <Image
                         src={background2}
                         alt="Background"
@@ -43,7 +43,7 @@ export default function ProjectsPage() {
                         }}
                     />
                 </div>
-                <div className={styles.about}>
+                <div className={styles.about} style={{ position: 'relative', zIndex: 1 }}>
                     <EditNote />
                     
                     <div className={styles.profileSection}>

@@ -46,10 +46,10 @@ export default function HomePage() {
           sizes="100vw"
           style={{
             objectFit: 'cover',
-            zIndex: -1
+            // zIndex: -1 removed to prevent hiding behind body background
           }}
         />
-        <div className={styles.hero}>
+        <div className={styles.hero} style={{ position: 'relative', zIndex: 1 }}>
           <h1 className={styles.fancytitle} id="fancytitle">Hi, my name is</h1>
           <h1 className={styles.signature} id="signature">Daniel</h1>
         </div>
