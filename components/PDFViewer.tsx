@@ -5,10 +5,7 @@ import { Document, Page, pdfjs } from 'react-pdf';
 import Button from './Button';
 import styles from './pdf.module.scss';
 
-pdfjs.GlobalWorkerOptions.workerSrc = new URL(
-    '../node_modules/react-pdf/node_modules/pdfjs-dist/build/pdf.worker.min.mjs',
-    import.meta.url,
-).toString();
+pdfjs.GlobalWorkerOptions.workerSrc = '/pdf.worker.min.mjs';
 
 type PDFViewerProps = {
     file: string;
