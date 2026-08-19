@@ -11,7 +11,6 @@ import { useRef } from 'react';
 import { useGSAP } from '@gsap/react';
 import gsap from 'gsap';
 import { SplitText } from 'gsap/all';
-import { fadeInUp } from '../utils/animations';
 import Button from '@/components/Button';
 import Image from 'next/image';
 import background1 from './assets/background1.png';
@@ -25,14 +24,17 @@ export default function HomePage() {
   //const currentPath = usePathname();
 
   useGSAP(() => {
-    const split = SplitText.create("#fancytitle", { type: "words, chars" });
-    const tl = gsap.timeline();
-    tl.add("bluespin", 1)
-      .from(split.words, { duration: 1, y: 100, autoAlpha: 0, stagger: 0.4}, 0.2)
-      .add(fadeInUp("#signature"), 2)
-      .add(fadeInUp("#projects-button"), 4)
-      .add(fadeInUp("#github-button"), 5)
-  })
+    const split = SplitText.create('#fancytitle', { type: 'words, chars' });
+    const tl = gsap.timeline({ defaults: { ease: 'power2.out' } });
+
+    tl.from(split.words, { duration: 1, y: 100, autoAlpha: 0, stagger: 0.4 }, 0.2)
+      .from('#signature', { y: 90, autoAlpha: 0, duration: 1 }, 1.8)
+      .from('#signature-tagline', { y: 26, autoAlpha: 0, duration: 0.9 }, 2.6);
+
+    return () => {
+      split.revert();
+    };
+  }, { scope: container })
 
   return (
     <ReactLenis root>
@@ -52,6 +54,7 @@ export default function HomePage() {
         <div className={styles.hero} style={{ position: 'relative', zIndex: 1 }}>
           <h1 className={styles.fancytitle} id="fancytitle">Hi, my name is</h1>
           <h1 className={styles.signature} id="signature">Daniel</h1>
+          <p className={styles.tagline} id="signature-tagline">M.Eng. Telematics Engineer focused on Computer Vision and Machine Learning</p>
         </div>
         <div className={styles.buttons}>
           <Button 

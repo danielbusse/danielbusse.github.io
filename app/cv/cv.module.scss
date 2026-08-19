@@ -1,23 +1,58 @@
 .main {
     min-height: 100vh;
-    /* background-image removed */
-
+    position: relative;
     display: flex;
     flex-direction: column;
     align-items: center;
-    text-align: justify;
-    padding-top: 100px;
-    padding-right: 20%;
-    padding-left: 20%;
+    padding: 120px 20px 60px;
+    text-align: left;
 
-
-    .cv {
-        width: 80%;
-        display: flex;
-
-        align-items: center;
-        align-content: center;
-        justify-items: center;
+    .intro {
+        position: relative;
+        z-index: 1;
+        max-width: 700px;
+        margin-bottom: 70px;
         justify-content: center;
+        text-align: center;
+        min-height: 30vh;
+        padding-top: 5vh;
+        display: flex;
+        flex-direction: column;
+
+        h1 {
+            text-align: center;
+            font-size: clamp(3rem, 8vw, 6rem);
+            font-family: var(--font-wobble-title), sans-serif;
+            font-weight: 100;
+            text-transform: uppercase;
+            color: rgb(228, 222, 242);
+            margin: 0 0 20px;
+        }
+    }
+
+    .notice {
+        font-family: var(--font-links);
+        font-size: clamp(0.95rem, 2vw, 1.1rem);
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+        color: rgb(219, 219, 219);
+        opacity: 0.9;
+        line-height: 1.45;
+    }
+
+    .foreground {
+        position: relative;
+        z-index: 1;
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 1.25rem;
+    }
+
+    .description {
+        max-width: 70ch;
+        margin: 0;
+        opacity: 0.86;
     }
 }

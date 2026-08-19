@@ -60,7 +60,7 @@ export default function About() {
                     <span className={styles.notice}>
                         Below you can find a selection of projects I have worked on in the past.
                     </span>
-                    <EditNote/>
+                    <br/>
                     
                     <div className={styles.scrollHint}>
                         <div className={styles.circle} onClick={handleScrollHintClick}>

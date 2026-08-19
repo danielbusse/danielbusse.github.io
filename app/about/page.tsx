@@ -7,6 +7,8 @@ import { useTransitionRouter } from 'next-view-transitions';
 import Image from 'next/image';
 import EditNote from "@/components/EditNote";
 import Button from "@/components/Button";
+import AboutGridItem from '@/components/about/AboutGridItem';
+import { aboutSections } from '@/content/about/sections';
 import { animateWave, slideInOut } from '@/utils/animations';
 import background2 from '../assets/background2.png';
 
@@ -43,8 +45,8 @@ export default function ProjectsPage() {
                         }}
                     />
                 </div>
+                <br />
                 <div className={styles.about} style={{ position: 'relative', zIndex: 1 }}>
-                    <EditNote />
                     
                     <div className={styles.profileSection}>
                         <div className={styles.imageWrapper}>
@@ -60,60 +62,16 @@ export default function ProjectsPage() {
                         <div className={styles.introText}>
                             <h1><span ref={waveRef} style={{ display: 'inline-block', transformOrigin: '70% 70%' }}>👋</span> Welcome!</h1>
                             <p>
-                                Thanks for checking out my little website. I&apos;m Daniel, a software engineer with a Bachelor&apos;s degree in Telematics, currently pursuing a Master&apos;s degree in the same field.
+                                Thanks for checking out my little website. I&apos;m Daniel, a software engineer with a master&apos;s degree in Telematics. I am experienced in computer vision, machine learning, and some web development. <br/><br/>
+                                I enjoy working on projects that challenge me to learn new things and push the boundaries of what is possible with technology.
                             </p>
                         </div>
                     </div>
 
                     <div className={styles.gridSection}>
-                        <div className={styles.gridItem}>
-                            <h3>💼 Career & Experience</h3>
-                            <p>
-                                During my studies, I have gained practical experience through internships and working student positions. I have worked for the university data center doploying and maintaining servers and services. I also worked for a engineering office developing solutions for RFID applications. During my bachelor thesis and beyond I worked for the Wildauer Maschinen Werke on lane detection algorithms using computer vision for Trucks in the scale of 14:1. My master Thesis has been conducted with John Deere focusing on the transfer of multimodal machine learning models into the agricultural domain. You can read my CV <a href="/cv" onClick={handleProjectClick}>here</a> and find some more of my projects <a href="/projects" onClick={handleProjectClick}>here</a>.
-                            </p>
-                        </div>
-
-                        <div className={styles.gridItem}>
-                            <h3>🧠 Personality</h3>
-                            <p>
-                                I am a logical and strategic thinker. I like to play video games of different genres but mostly with strategic elements. I have a high interest in understanding things and ideas better and the relationships and connections between them. I am eager to learn more and love exchanging ideas and thoughts with others, exploring multiple perspectives to gain a deeper understanding.
-                            </p>
-                        </div>
-
-                        <div className={styles.gridItem}>
-                            <h3>🎮 Game Development</h3>
-                            <Image 
-                                src="/assets/IMG_3928.png" 
-                                alt="Game Development Screenshot" 
-                                width={800} 
-                                height={450} 
-                                className={styles.mediaImage}
-                            />
-                            <p>
-                                Game development is my personal coding adventure. This multidisciplinary field of engineering leaves so much room for creative ideas and experimentation. I love being able to pack emotions, ideas, relationships and fun into a singular medium.
-                            </p>
-                        </div>
-
-                        <div className={styles.gridItem}>
-                            <h3>🎸 Music Passion</h3>
-                            <Image 
-                                src="/assets/IMG_1804.png" 
-                                alt="Playing Guitar on Stage" 
-                                width={800} 
-                                height={450} 
-                                className={`${styles.mediaImage} ${styles.focusTop}`}
-                            />
-                            <p>
-                                Music is my longest-running passion. I&apos;ve been playing guitar since primary school and still jam with others regularly. Besides guitar I like playing other instruments like piano and drums, even though I&apos;m not an expert with them. And like most people, I love listening to music and discussing it with others.
-                            </p>
-                        </div>
-
-                        <div className={styles.gridItem}>
-                            <h3>👥 Creativity & Community</h3>
-                            <p>
-                                I love to be creative! And I express my creativity by making music, video game development and conceptualizing. I also enjoy doing team sports. The emphasis on teamwork in sports is more important to me than competition. Sports I like to play are volleyball, football (soccer), spikeball and many more — it&apos;s always fun to learn something new. Every summer, I volunteer as staff at an english camp for teenagers in a rural region of Brandenburg, as well as multiple reunions throughout the year amongst the same community.
-                            </p>
-                        </div>
+                        {aboutSections.map((item) => (
+                            <AboutGridItem key={item.id} item={item} />
+                        ))}
                     </div>
 
                     <div className={styles.outroSection}>

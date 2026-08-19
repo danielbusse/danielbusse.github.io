@@ -1,11 +1,9 @@
 .main {
     min-height: 100vh;
-    /* background-image removed */
 
     display: flex;
     flex-direction: column;
     align-items: center;
-    // text-align: justify; // Moved to specific sections
     padding-top: 100px;
     padding-right: 5%;
     padding-left: 5%;
@@ -31,7 +29,7 @@
         
         @media (min-width: 768px) {
             flex-direction: row;
-            align-items: center; // Center vertically
+            align-items: center;
         }
 
         .imageWrapper {
@@ -41,7 +39,7 @@
         .profileImage {
             border-radius: 20px;
             object-fit: cover;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
             border: 1px solid rgba(255, 255, 255, 0.1);
         }
 
@@ -54,9 +52,6 @@
                 font-size: 3rem;
                 margin-bottom: 1.5rem;
                 font-weight: 700;
-                // background: linear-gradient(to right, #fff, #ccc);
-                // -webkit-background-clip: text;
-                // -webkit-text-fill-color: transparent;
             }
             
             p {
@@ -80,7 +75,7 @@
     }
 
     .gridItem {
-        background: rgba(255, 255, 255, 0.03);
+        background: rgba(0, 0, 0, 0.2);
         padding: 2rem;
         border-radius: 16px;
         border: 1px solid rgba(255, 255, 255, 0.05);
@@ -94,9 +89,19 @@
 
         &:hover {
             transform: translateY(-5px);
-            background: rgba(255, 255, 255, 0.07);
+            background: rgba(50, 50, 50, 0.3);
             box-shadow: 0 10px 20px rgba(0,0,0,0.2);
             border-color: rgba(255, 255, 255, 0.1);
+        }
+
+        a {
+            color: var(--primary);
+            text-decoration: underline;
+            cursor: pointer;
+
+            &:hover {
+                color: var(--secondary);
+            }
         }
 
         p {
@@ -163,12 +168,12 @@
             color: rgba(255, 255, 255, 0.9);
             
             a {
-                color: var(--primary); // Assuming primary color variable exists
+                color: var(--primary);
                 text-decoration: underline;
                 cursor: pointer;
                 
                 &:hover {
-                    color: white;
+                    color: var(--secondary);
                 }
             }
         }
@@ -182,34 +187,8 @@
         gap: 1rem;
 
         .cta {
-            display: flex; // Ensure flex for centering content
-            align-items: center;
-            justify-content: center;
-            padding: 0.8rem 1.5rem;
-            // margin: 10px; // Removed margin in favor of gap
-            color: white;
-            border-radius: 8px;
-            text-decoration: none;
-            font-family: var(--font-links);
-            font-weight: 600;
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
-
-            border-style: solid;
-            border-width: 2px;
-            border-color: rgba(0, 238, 255, 0.5);
-            border-radius: 20px; // Fixed unit
-            
-            min-width: 140px; // Increased min-width
+            min-width: 160px;
             height: 3.5em;
-
-            &:hover {
-                background-color: rgb(0, 105, 112);
-                border-color: rgba(0, 238, 255, 0.8);
-                transform: translateY(-2px);
-                box-shadow: 0 5px 15px rgba(0, 238, 255, 0.2);
-            }
         }
     }
 }

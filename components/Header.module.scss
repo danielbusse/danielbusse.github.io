@@ -1,4 +1,9 @@
 .nav {
+    --header-blur: 10px;
+    --header-bg-alpha: 0.18;
+    --header-transition: 400ms;
+    --header-height: 100px;
+
     box-sizing: border-box;
     padding: 0;
     margin: 0;
@@ -8,12 +13,74 @@
     left: 0;
     width: 100vw;
     color: white;
-    padding: 1.5rem;
     z-index: 1000;
 
     display: flex;
     justify-content: space-between;
     align-items: center;
+    isolation: isolate;
+    overflow: hidden;
+    min-height: var(--header-height);
+    padding: 1.2rem 1.5rem;
+    background-color: rgba(200, 200, 200, 0);
+    transition:
+        background-color var(--header-transition) ease,
+        opacity var(--header-transition) ease;
+
+    .backdrop {
+        position: absolute;
+        inset: 0;
+    }
+
+    .backdrop {
+        z-index: 0;
+        pointer-events: none;
+        opacity: 0;
+        background: linear-gradient(
+            180deg,
+            rgba(200, 200, 200, 0.02) 0%,
+            rgba(200, 200, 200, 0.08) 100%
+        );
+        transition: opacity var(--header-transition) ease;
+    }
+
+    .content {
+        position: relative;
+        z-index: 1;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        pointer-events: none;
+        width: min(100%, 1000px);
+        margin: 0 auto;
+    }
+
+    .content > * {
+        pointer-events: auto;
+    }
+
+    &::after {
+        content: '';
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        height: 2px;
+        z-index: 2;
+        pointer-events: none;
+        opacity: 0;
+        transform: scaleX(0.96);
+        transform-origin: center;
+        background: linear-gradient(
+            90deg,
+            rgba(255, 195, 225, 0) 0%,
+            rgba(255, 208, 232, 0.5) 20%,
+            rgba(255, 208, 232, 0.92) 50%,
+            rgba(255, 208, 232, 0.5) 80%,
+            rgba(255, 195, 225, 0) 100%
+        );
+        transition: opacity var(--header-transition) ease, transform var(--header-transition) ease;
+    }
   
     img {
         width: 100%;
@@ -27,8 +94,15 @@
         text-transform: uppercase;
         color: white;
         font-family: var(--font-links);
-        font-size: 18px;
+        font-size: 19px;
         font-weight: 600;
+
+        
+    }
+
+    .brand {
+        font-size: 170%;
+        font-weight: 800;
     }
 
     .links {
@@ -38,7 +112,34 @@
 
     .breadcrumb {
         font-family: var(--font-links);
-        font-size: 80%;
+        font-size: 110%;
         margin-left: 1em;
+        opacity: 0.85;
+    }
+}
+
+.scrolled {
+    background-color: rgba(200, 200, 200, var(--header-bg-alpha));
+
+    .backdrop {
+        opacity: 1;
+    }
+
+    &::after {
+        opacity: 1;
+        transform: scaleX(1);
+        animation: headerEdgeShimmer 2.8s ease-in-out infinite;
+    }
+}
+
+@keyframes headerEdgeShimmer {
+    0% {
+        filter: brightness(0.7);
+    }
+    50% {
+        filter: brightness(1.22);
+    }
+    100% {
+        filter: brightness(0.7);
     }
 }

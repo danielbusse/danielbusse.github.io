@@ -2,19 +2,15 @@
 
 import dynamic from 'next/dynamic';
 import Image from 'next/image';
-import EditNote from '@/components/EditNote';
 
 import background5 from '../assets/background5.png';
 import styles from './cv.module.scss';
 
-import 'react-pdf/dist/Page/AnnotationLayer.css';
-import 'react-pdf/dist/Page/TextLayer.css';
-
-const PDFViewer = dynamic(() => import("../../components/PDFViewer"), {
+const PDFViewer = dynamic(() => import('../../components/PDFViewer'), {
     ssr: false,
 });
 
-export default function ProjectsPage() {
+export default function CVPage() {
     return (
         <div className={styles.main}>
             <div style={{ position: 'fixed', top: 0, left: 0, width: '100%', height: '100%' }}>
@@ -30,11 +26,14 @@ export default function ProjectsPage() {
                     }}
                 />
             </div>
-            <div style={{ position: 'relative', zIndex: 1, width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                <EditNote />
-                <div className={styles.cv}>
-                    <PDFViewer file="/pdfs/cv_eng.pdf"/>
-                </div>
+            <section className={styles.intro}>
+                <h1>Curriculum Vitae</h1>
+                <span className={styles.notice}>
+                    A brief overview of my professional path, practical experience, and technical focus.
+                </span>
+            </section>
+            <div className={styles.foreground}>
+                <PDFViewer file="/pdfs/cv_eng.pdf" title="PDF Preview" />
             </div>
         </div>
     );

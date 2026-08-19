@@ -3,18 +3,18 @@
   overflow: hidden;
   text-decoration: none;
   border-style: solid;
-  border-width: 1px; // Default, can be overridden
+  border-width: 1px;
   border-color: $border-color;
-  border-radius: 8px; // Consistent radius
+  border-radius: 8px;
   transition: all 0.7s ease;
   cursor: pointer;
-  display: inline-flex; // Ensure proper sizing
+  display: inline-flex;
   align-items: center;
   justify-content: center;
 
   .shimmer {
-    height: 300%; // Tall enough to cover button at any angle
-    width: 20px; // Slightly wider for better visibility
+    height: 460%;
+    width: 26px;
     background-image: linear-gradient(
       to left,
       rgba(255, 255, 255, 0.1),
@@ -24,7 +24,7 @@
     position: absolute;
     top: 50%;
     left: -100%; // Start completely off-screen left
-    transform: translateY(-50%) rotate(30deg); // Center vertically and rotate
+    transform: translateY(-50%) rotate(24deg);
     filter: blur(2px);
     transition: left 0.7s ease;
     pointer-events: none;
@@ -33,10 +33,9 @@
   &:hover {
     background-color: $hover-bg-color;
     border-color: $hover-border-color;
-    border-width: 3px;
     
     .shimmer {
-      left: 200%; // Move completely off-screen right
+      left: 200%;
     }
   }
 }
