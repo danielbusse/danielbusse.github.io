@@ -45,6 +45,93 @@ export function slideInOut() {
 
 
 /**
+ * View Transition Animation
+ * Slides the current page out to the left while the new page wipes in from the right.
+ * Used for forward navigation from the projects timeline into an article.
+ */
+export function slideLeftOut() {
+  document.documentElement.animate(
+    [
+      {
+        opacity: 1,
+        transform: "translateX(0)",
+      },
+      {
+        opacity: 0.2,
+        transform: "translateX(-35%)",
+      },
+    ],
+    {
+      duration: 1500,
+      easing: "cubic-bezier(0.87, 0, 0.13, 1)",
+      fill: "forwards",
+      pseudoElement: "::view-transition-old(root)",
+    }
+  );
+
+  document.documentElement.animate(
+    [
+      {
+        clipPath: "polygon(100% 0%, 100% 100%, 100% 100%, 100% 0%)",
+      },
+      {
+        clipPath: "polygon(0% 0%, 0% 100%, 100% 100%, 100% 0%)",
+      },
+    ],
+    {
+      duration: 1500,
+      easing: "cubic-bezier(0.87, 0, 0.13, 1)",
+      fill: "forwards",
+      pseudoElement: "::view-transition-new(root)",
+    }
+  );
+}
+
+/**
+ * View Transition Animation
+ * Slides the current page out to the right while the new page wipes in from the left.
+ * Used for backward navigation from an article back to the projects timeline.
+ */
+export function slideRightOut() {
+  document.documentElement.animate(
+    [
+      {
+        opacity: 1,
+        transform: "translateX(0)",
+      },
+      {
+        opacity: 0.2,
+        transform: "translateX(35%)",
+      },
+    ],
+    {
+      duration: 1500,
+      easing: "cubic-bezier(0.87, 0, 0.13, 1)",
+      fill: "forwards",
+      pseudoElement: "::view-transition-old(root)",
+    }
+  );
+
+  document.documentElement.animate(
+    [
+      {
+        clipPath: "polygon(0% 0%, 0% 100%, 0% 100%, 0% 0%)",
+      },
+      {
+        clipPath: "polygon(0% 0%, 0% 100%, 100% 100%, 100% 0%)",
+      },
+    ],
+    {
+      duration: 1500,
+      easing: "cubic-bezier(0.87, 0, 0.13, 1)",
+      fill: "forwards",
+      pseudoElement: "::view-transition-new(root)",
+    }
+  );
+}
+
+
+/**
  * Creates a shimmer effect animation tween.
  * Animates the shimmer element from left to right across the container.
  * @param target The element to animate

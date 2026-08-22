@@ -67,13 +67,13 @@ export default function HomePage() {
             Check out my Projects
           </Button>
           <Button 
-            href="https://github.com/danielbusse/" 
+            href="/cv" 
             id="github-button"
             className={styles.cta}
             animateOnLoad={true}
             delay={5.5}
           >
-            Check out my Github
+            Check out my CV
           </Button>
         </div>
       </main>

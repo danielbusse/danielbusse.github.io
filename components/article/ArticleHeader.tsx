@@ -3,7 +3,7 @@
 import React from 'react';
 import Link from 'next/link';
 import { useTransitionRouter } from 'next-view-transitions';
-import { slideInOut } from '@/utils/animations';
+import { slideRightOut } from '@/utils/animations';
 import styles from './ArticleHeader.module.scss';
 
 interface ArticleHeaderProps {
@@ -18,7 +18,7 @@ export default function ArticleHeader({ title, period, tags }: ArticleHeaderProp
     const handleBackClick = (e: React.MouseEvent) => {
         e.preventDefault();
         router.push('/projects', {
-            onTransitionReady: slideInOut,
+            onTransitionReady: slideRightOut,
         });
     };
 

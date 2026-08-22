@@ -1,6 +1,7 @@
 import Image from 'next/image';
 import React from 'react';
 import styles from '@/app/about/About.module.scss';
+import AboutSlideshow from './AboutSlideshow';
 
 export interface AboutGridImage {
     src: string;
@@ -15,6 +16,7 @@ export interface AboutGridItemData {
     title: string;
     content: React.ReactNode;
     image?: AboutGridImage;
+    images?: AboutGridImage[];
 }
 
 interface AboutGridItemProps {
@@ -25,7 +27,9 @@ export default function AboutGridItem({ item }: AboutGridItemProps) {
     return (
         <div className={styles.gridItem}>
             <h3>{item.title}</h3>
-            {item.image && (
+            {item.images && item.images.length > 0 ? (
+                <AboutSlideshow images={item.images} />
+            ) : item.image ? (
                 <Image
                     src={item.image.src}
                     alt={item.image.alt}
@@ -33,7 +37,7 @@ export default function AboutGridItem({ item }: AboutGridItemProps) {
                     height={item.image.height}
                     className={`${styles.mediaImage} ${item.image.focusTop ? styles.focusTop : ''}`.trim()}
                 />
-            )}
+            ) : null}
             {item.content}
         </div>
     );

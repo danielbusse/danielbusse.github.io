@@ -154,6 +154,64 @@
         .focusTop {
             object-position: center 30%;
         }
+
+        .mediaSlideshow {
+            position: relative;
+            width: 100%;
+            height: 250px;
+            border-radius: 8px;
+            margin-bottom: 1.5rem;
+            overflow: hidden;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .slideshowImage {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center;
+            opacity: 0;
+            transform: scale(1.04);
+            transition: opacity 1s ease, transform 1.2s ease;
+        }
+
+        .slideshowImageActive {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        .slideshowDots {
+            position: absolute;
+            bottom: 12px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 6px;
+            z-index: 1;
+        }
+
+        .slideshowDot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            border: none;
+            padding: 0;
+            background: rgba(255, 255, 255, 0.4);
+            cursor: pointer;
+            transition: background 0.3s ease, transform 0.3s ease;
+
+            &:hover {
+                background: rgba(255, 255, 255, 0.7);
+            }
+        }
+
+        .slideshowDotActive {
+            background: rgba(255, 255, 255, 0.95);
+            transform: scale(1.2);
+        }
     }
 
     .outroSection {

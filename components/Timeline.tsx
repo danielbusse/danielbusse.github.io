@@ -8,7 +8,8 @@ import { useLenis } from 'lenis/react';
 import projectsData from "@/data/projects.json";
 import styles from "./Timeline.module.scss";
 import Link from "next/link";
-import { playEmojiAnimation } from "@/utils/animations";
+import { useTransitionRouter } from "next-view-transitions";
+import { playEmojiAnimation, slideLeftOut } from "@/utils/animations";
 
 // Register GSAP plugins
 if (typeof window !== "undefined") {
@@ -35,6 +36,7 @@ export default function Timeline({ radius = 800, itemBaseHeight = 150 }: Timelin
     const containerRef = useRef<HTMLDivElement>(null);
     const viewportRef = useRef<HTMLDivElement>(null);
     const [activeIndex, setActiveIndex] = useState(0);
+    const router = useTransitionRouter();
 
     const [windowHeight, setWindowHeight] = useState(0);
     // Removed cached pillWidths to use direct read due to stability issues
@@ -462,9 +464,13 @@ export default function Timeline({ radius = 800, itemBaseHeight = 150 }: Timelin
                                     <Link 
                                         href={item.data.link} 
                                         className={styles.projectCardLink}
-                                        onClick={() => {
+                                        onClick={(e) => {
+                                            e.preventDefault();
                                             // Save current scroll position before navigating
                                             sessionStorage.setItem('timeline_scroll_pos', window.scrollY.toString());
+                                            router.push(item.data.link, {
+                                                onTransitionReady: slideLeftOut,
+                                            });
                                         }}
                                         onMouseEnter={(e) => {
                                             const target = e.currentTarget.querySelector(`.${styles.cardEmoji}`) as HTMLElement;

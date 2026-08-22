@@ -34,12 +34,32 @@ export const aboutSections: AboutGridItemData[] = [
     {
         id: 'game-development',
         title: '🎮 Game Development',
-        image: {
-            src: '/assets/IMG_3928.png',
-            alt: 'Game Development Screenshot',
-            width: 800,
-            height: 450,
-        },
+        images: [
+            {
+                src: '/assets/IMG_3928.png',
+                alt: 'Game Development Screenshot',
+                width: 800,
+                height: 450,
+            },
+            {
+                src: '/assets/IMG_1298.png',
+                alt: 'Game Development Screenshot',
+                width: 800,
+                height: 450,
+            },
+            {
+                src: '/assets/IMG_2345.png',
+                alt: 'Game Development Screenshot',
+                width: 800,
+                height: 450,
+            },
+            {
+                src: '/assets/IMG_3742.png',
+                alt: 'Game Development Screenshot',
+                width: 800,
+                height: 450,
+            },
+        ],
         content: (
             <p>
                 Game development is my biggest personal coding adventure. This multidisciplinary field leaves room for creative ideas and experimentation. I love being able to pack emotions, ideas, relationships, and fun into a single medium.
@@ -51,13 +71,27 @@ export const aboutSections: AboutGridItemData[] = [
     {
         id: 'music-passion',
         title: '🎸 Music Passion',
-        image: {
-            src: '/assets/IMG_1804.png',
-            alt: 'Playing Guitar on Stage',
-            width: 800,
-            height: 450,
-            focusTop: true,
-        },
+        images: [
+            {
+                src: '/assets/IMG_1804.png',
+                alt: 'Playing Guitar on Stage',
+                width: 800,
+                height: 450,
+                focusTop: true,
+            },
+            {
+                src: '/assets/IMG_1272.png',
+                alt: 'Playing music with the band',
+                width: 800,
+                height: 450,
+            },
+            {
+                src: '/assets/IMG_9428.png',
+                alt: 'Live music performance',
+                width: 800,
+                height: 450,
+            },
+        ],
         content: (
             <p>
                 Music is my longest-running passion. I&apos;ve been playing guitar, especially the electric guitar, since primary school. 

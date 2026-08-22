@@ -1,3 +1,5 @@
+"use client";
+
 import { ArticleLayout, ArticleHeader, ArticleBody } from '@/components/article';
 import { getProject } from '@/utils/getProject';
 import BachelorThesisContent from '@/content/projects/bachelor-thesis';

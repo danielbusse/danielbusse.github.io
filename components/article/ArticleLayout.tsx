@@ -11,6 +11,7 @@ interface ArticleLayoutProps {
 }
 
 export default function ArticleLayout({ children }: ArticleLayoutProps) {
+
     return (
         <ReactLenis root>
             <div className={styles.main}>
