@@ -1,0 +1,267 @@
+.pdfAction {
+  display: flex;
+  justify-content: center;
+  margin: 1.25rem 0 2rem;
+}
+
+.pdfAction .pdfButton {
+  padding: 0.55rem 1rem;
+  border-radius: 4px;
+  font-size: 0.92rem;
+  text-decoration: none;
+
+  &:focus-visible {
+    outline: 2px solid currentColor;
+    outline-offset: 3px;
+  }
+}
+
+.sampleFigure,
+.workflowFigure,
+.datasetFigure,
+.aucFigure {
+  margin: 2rem 0 2.5rem;
+}
+
+.sampleVisual {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1920 / 1058;
+  overflow: hidden;
+  border-radius: 6px;
+  background: #101716;
+}
+
+.sampleBase,
+.sampleMask {
+  object-fit: cover;
+}
+
+.sampleMask {
+  opacity: 0.78;
+  mix-blend-mode: screen;
+  mask-image: url('/assets/master-thesis-example-002.png');
+  mask-mode: luminance;
+  mask-size: 100% 100%;
+  mask-repeat: no-repeat;
+  -webkit-mask-image: url('/assets/master-thesis-example-002.png');
+  -webkit-mask-size: 100% 100%;
+  -webkit-mask-repeat: no-repeat;
+}
+
+.sampleFigure figcaption,
+.workflowFigure figcaption,
+.datasetFigure figcaption,
+.aucFigure figcaption {
+  font-weight: 700;
+  margin-bottom: 0.75rem;
+}
+
+.sampleFigure > figcaption {
+  margin: 0.75rem 0 0;
+  font-size: 0.95rem;
+  font-weight: 400;
+}
+
+.promptExample {
+  margin: 1.5rem 0 2rem;
+  padding: 0.25rem 0 0.25rem 1rem;
+  border-left: 3px solid var(--primary);
+}
+
+.promptExample p {
+  margin: 0.5rem 0 0;
+}
+
+.workflow {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 1rem;
+  margin: 1rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.workflowStep {
+  min-width: 0;
+  padding-top: 0.75rem;
+  border-top: 2px solid var(--primary);
+}
+
+.workflowStep > span {
+  display: block;
+  margin-bottom: 0.65rem;
+  font-family: var(--font-monospace, monospace);
+  font-size: 0.85rem;
+  font-weight: 700;
+}
+
+.workflowStep strong {
+  display: block;
+  margin-bottom: 0.35rem;
+}
+
+.workflowStep p {
+  margin: 0;
+  font-size: 0.92rem;
+  line-height: 1.45;
+}
+
+.datasetFigure {
+  padding: 1.25rem 0;
+  border-block: 1px solid rgba(3, 7, 7, 0.2);
+}
+
+.datasetRow + .datasetRow {
+  margin-top: 1.5rem;
+}
+
+.datasetHeading {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 0.45rem;
+}
+
+.splitBar {
+  display: flex;
+  width: 100%;
+  height: 0.8rem;
+  overflow: hidden;
+  border-radius: 2px;
+  background: rgba(3, 7, 7, 0.08);
+}
+
+.trainSegment,
+.validationSegment,
+.testSegment {
+  display: block;
+  height: 100%;
+}
+
+.trainSegment,
+.trainSwatch {
+  background: #438f83;
+}
+
+.validationSegment,
+.validationSwatch {
+  background: #d6a34e;
+}
+
+.testSegment,
+.testSwatch {
+  background: #c9685d;
+}
+
+.splitDetails {
+  margin: 0.45rem 0 0;
+  font-size: 0.88rem;
+}
+
+.splitLegend,
+.aucLegend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-top: 1rem;
+  font-size: 0.88rem;
+}
+
+.splitLegend span,
+.aucLegend span {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.trainSwatch,
+.validationSwatch,
+.testSwatch,
+.viltSwatch,
+.blipSwatch {
+  display: inline-block;
+  width: 0.7rem;
+  height: 0.7rem;
+  flex: 0 0 auto;
+  border-radius: 1px;
+}
+
+.aucFigure {
+  padding: 1.25rem 0;
+  border-block: 1px solid rgba(3, 7, 7, 0.2);
+}
+
+.aucLegend {
+  margin: 0 0 0.5rem;
+}
+
+.viltSwatch,
+.viltFill {
+  background: #287d91;
+}
+
+.blipSwatch,
+.blipFill {
+  background: #c77350;
+}
+
+.aucRow {
+  display: grid;
+  grid-template-columns: 7rem minmax(0, 1fr) minmax(0, 1fr);
+  gap: 0.8rem;
+  align-items: center;
+  padding: 0.9rem 0;
+  border-top: 1px solid rgba(3, 7, 7, 0.12);
+}
+
+.aucMetric {
+  display: grid;
+  grid-template-columns: 3.2rem minmax(2rem, 1fr) 3rem;
+  gap: 0.45rem;
+  align-items: center;
+  font-size: 0.85rem;
+}
+
+.aucMetric b {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+.meter {
+  height: 0.55rem;
+  overflow: hidden;
+  border-radius: 1px;
+  background: rgba(3, 7, 7, 0.09);
+}
+
+.meter span {
+  display: block;
+  height: 100%;
+}
+
+.chartNote {
+  margin: 1rem 0 0;
+  font-size: 0.9rem;
+}
+
+@media (max-width: 850px) {
+  .workflow {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 640px) {
+  .workflow {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .aucRow {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0.65rem;
+  }
+
+  .aucMetric {
+    grid-template-columns: 3.2rem minmax(2rem, 1fr) 3rem;
+  }
+}

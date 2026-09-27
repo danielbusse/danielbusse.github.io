@@ -1,0 +1,98 @@
+.approachList {
+  padding-left: 1.25rem;
+  margin: 0 0 1.5rem;
+}
+
+.approachList li {
+  padding-left: 0.25rem;
+  margin-bottom: 0.75rem;
+}
+
+.pipelineFigure {
+  margin: 2rem 0 2.5rem;
+}
+
+.pipelineFigure figcaption,
+.resultStage figcaption {
+  margin-bottom: 0.75rem;
+  font-weight: 700;
+}
+
+.pipeline {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1rem;
+  margin: 1rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.pipelineStep {
+  min-width: 0;
+  padding-top: 0.75rem;
+  border-top: 2px solid var(--primary);
+}
+
+.pipelineStep > span {
+  display: block;
+  margin-bottom: 0.65rem;
+  color: inherit;
+  font-family: var(--font-monospace, monospace);
+  font-size: 0.85rem;
+  font-weight: 700;
+}
+
+.pipelineStep strong {
+  display: block;
+  margin-bottom: 0.35rem;
+}
+
+.pipelineStep p {
+  margin: 0;
+  font-size: 0.92rem;
+  line-height: 1.45;
+}
+
+.resultGallery {
+  display: grid;
+  gap: 1.5rem;
+  margin: 1.5rem 0 2.5rem;
+}
+
+.resultStage {
+  min-width: 0;
+  margin: 0;
+}
+
+.resultStage figcaption {
+  display: grid;
+  gap: 0.2rem;
+}
+
+.resultStage figcaption span {
+  font-size: 0.92rem;
+  font-weight: 400;
+}
+
+.imagePair {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.75rem;
+}
+
+.imagePair img {
+  max-height: 18rem;
+  object-fit: contain;
+  border-radius: 4px;
+  background: rgba(0, 0, 0, 0.18);
+}
+
+@media (max-width: 640px) {
+  .pipeline {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .imagePair {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
