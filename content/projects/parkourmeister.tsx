@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import Image from 'next/image';
+import OptimizedImage from '@/components/OptimizedImage';
 
 export default function ParkourmeisterContent() {
     return (
@@ -21,7 +21,7 @@ export default function ParkourmeisterContent() {
             <p>
                 The sensor data was not used in a probabilistic or geometric way; instead, it was reduced into a small set of qualitative states. The data from each sensor was categorized as either clear, close or blocked, depending on a threshold. This simplified the problem enough to implement a lightweight state machine directly on the robot.
             </p>
-            <Image
+            <OptimizedImage
                 src="/assets/nibo_schematic.png"
                 alt="Sensorlayout of the NIBO 2 robot"
                 width={800}

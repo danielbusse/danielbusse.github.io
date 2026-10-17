@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import Image from 'next/image';
+import OptimizedImage from '@/components/OptimizedImage';
 import EditNote from '@/components/EditNote';
 
 export default function NaolinoContent() {
@@ -17,7 +17,7 @@ export default function NaolinoContent() {
                 My project partner and I chose to focus on image recognition and object detection. We explored two approaches independently: template matching and a cascade classifier. Our targets were the lock of the container where the robot was stored, an apple, and a banana.
             </p>
             <figure style={{ maxWidth: '30rem', margin: '1.5rem auto 2rem' }}>
-                <Image
+                <OptimizedImage
                     src="/assets/nao.jpg"
                     alt="The NAO robot we used, called Marvin"
                     width={800}
@@ -34,7 +34,7 @@ export default function NaolinoContent() {
             </p>
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 16rem), 1fr))', gap: '1rem', maxWidth: '56rem', margin: '1.5rem auto 2rem' }}>
                 <figure style={{ margin: 0 }}>
-                    <Image
+                    <OptimizedImage
                         src="/assets/lock_template.jpg"
                         alt="Reference template of the lock"
                         width={400}
@@ -46,7 +46,7 @@ export default function NaolinoContent() {
                     </figcaption>
                 </figure>
                 <figure style={{ margin: 0 }}>
-                    <Image
+                    <OptimizedImage
                         src="/assets/lock_template_detected.png"
                         alt="Lock detected by template matching"
                         width={800}

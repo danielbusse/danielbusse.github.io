@@ -4,13 +4,14 @@ import { useRef } from 'react';
 import { useGSAP } from '@gsap/react';
 import { ReactLenis } from 'lenis/react';
 import { useTransitionRouter } from 'next-view-transitions';
-import Image from 'next/image';
+import OptimizedImage from '@/components/OptimizedImage';
 import EditNote from "@/components/EditNote";
 import Button from "@/components/Button";
 import AboutGridItem from '@/components/about/AboutGridItem';
 import { aboutSections } from '@/content/about/sections';
 import { animateWave, slideInOut } from '@/utils/animations';
 import background2 from '../assets/background2.png';
+import background2Webp from '../assets/background2.webp';
 
 import styles from './About.module.scss'
 
@@ -33,10 +34,13 @@ export default function ProjectsPage() {
         <ReactLenis root>
             <div className={styles.main}>
                 <div style={{ position: 'fixed', top: 0, left: 0, width: '100%', height: '100%' }}>
-                    <Image
+                    <OptimizedImage
                         src={background2}
+                        webpSrc={background2Webp}
                         alt="Background"
                         placeholder="blur"
+                        loading="eager"
+                        fetchPriority="high"
                         fill
                         quality={100}
                         sizes="100vw"
@@ -50,13 +54,14 @@ export default function ProjectsPage() {
                     
                     <div className={styles.profileSection}>
                         <div className={styles.imageWrapper}>
-                            <Image 
+                            <OptimizedImage
                                 src="/assets/IMG_2256.png" 
                                 alt="Daniel Busse" 
                                 width={400} 
                                 height={400} 
                                 className={styles.profileImage}
-                                priority
+                                loading="eager"
+                                fetchPriority="high"
                             />
                         </div>
                         <div className={styles.introText}>

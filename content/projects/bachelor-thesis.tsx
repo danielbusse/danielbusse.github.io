@@ -1,4 +1,4 @@
-import Image from 'next/image';
+import OptimizedImage from '@/components/OptimizedImage';
 import styles from './bachelor-thesis.module.scss';
 
 const resultStages = [
@@ -113,7 +113,7 @@ export default function BachelorThesisContent() {
                         </figcaption>
                         <div className={styles.imagePair}>
                             {stage.images.map((image) => (
-                                <Image
+                                <OptimizedImage
                                     key={image.src}
                                     src={image.src}
                                     alt={image.alt}

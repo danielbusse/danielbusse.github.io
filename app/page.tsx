@@ -12,8 +12,9 @@ import { useGSAP } from '@gsap/react';
 import gsap from 'gsap';
 import { SplitText } from 'gsap/all';
 import Button from '@/components/Button';
-import Image from 'next/image';
+import OptimizedImage from '@/components/OptimizedImage';
 import background1 from './assets/background1.png';
+import background1Webp from './assets/background1.webp';
 
 gsap.registerPlugin(SplitText)
 
@@ -39,10 +40,13 @@ export default function HomePage() {
   return (
     <ReactLenis root>
       <main className={styles.home} ref={container}>
-        <Image
+        <OptimizedImage
           src={background1}
+          webpSrc={background1Webp}
           alt="Background"
           placeholder="blur"
+          loading="eager"
+          fetchPriority="high"
           fill
           quality={100}
           sizes="100vw"

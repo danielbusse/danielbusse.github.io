@@ -1,5 +1,5 @@
 import EditNote from '@/components/EditNote';
-import Image from 'next/image';
+import OptimizedImage from '@/components/OptimizedImage';
 
 export default function TelematikContent() {
     return (
@@ -11,7 +11,7 @@ export default function TelematikContent() {
 				The project had good success. We were able to build a flying quadcopter, that was able to detect radiation and send the data to a ground station. However, due to strict drone regulations in Germany and the limited time of the project, we were not able to actually make a sufficient flight test in a real environment. The project was a great opportunity to apply the knowledge gained in the telematics master program to a real-world problem and to work in a team of students with different specializations.
 			</p>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', alignItems: 'center' }}>
-                <Image
+                <OptimizedImage
                     src="/assets/1.png"
                     alt="Drone"
                     width={400}
@@ -52,7 +52,7 @@ export default function TelematikContent() {
 			</p>
 
 			<div style={{ padding: '0rem', borderRadius: '0.25rem' }}>
-				<Image
+				<OptimizedImage
 					src="/assets/2.png"
 					alt="Drone with labels"
 					width={800}
@@ -61,7 +61,7 @@ export default function TelematikContent() {
 				/>
 			</div>
 			<div style={{ padding: '0rem', borderRadius: '0.25rem' }}>
-				<Image
+				<OptimizedImage
 					src="/assets/3.png"
 					alt="Drone with labels"
 					width={800}

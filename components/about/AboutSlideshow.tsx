@@ -1,6 +1,6 @@
 "use client";
 
-import Image from 'next/image';
+import OptimizedImage from '@/components/OptimizedImage';
 import { useEffect, useState } from 'react';
 import styles from '@/app/about/About.module.scss';
 import type { AboutGridImage } from './AboutGridItem';
@@ -31,7 +31,7 @@ export default function AboutSlideshow({ images, intervalMs = 4000 }: AboutSlide
             onMouseLeave={() => setIsPaused(false)}
         >
             {images.map((image, index) => (
-                <Image
+                <OptimizedImage
                     key={image.src}
                     src={image.src}
                     alt={image.alt}

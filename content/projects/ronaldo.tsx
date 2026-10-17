@@ -1,6 +1,6 @@
 import EditNote from '@/components/EditNote';
 import Link from 'next/link';
-import Image from 'next/image';
+import OptimizedImage from '@/components/OptimizedImage';
 
 export default function RonaldoContent() {
     return (
@@ -12,7 +12,7 @@ export default function RonaldoContent() {
             <p>
                 For this project we used a modified Nibo2 robot with additional features as displayed in the schema below. The Nibo was equipped with an extra layer on top of his construction that housed a Raspberry Pi 1 Model B and a low-cost USB-webcam. The Communication between both devices would be established over an wireless XBEE Module. The Raspberry acted as the high-level control unit. The Nibo was acting as a low-level actuator unit. The Raspberry would process images from the webcam and then send movement instructions to the Nibo over XBEE. The Nibo would then interpret and execute the instructions and manage motor execution, wheel speed and direction. It also manages the state of collision detection.
             </p>
-            <Image
+            <OptimizedImage
                 src="/assets/modified_nibo_schematic.png"
                 alt="schematic of the modified nibo robot"
                 width={800}
@@ -35,7 +35,7 @@ export default function RonaldoContent() {
             <p>
                 With the coordinates and the radius of the detected circle we could determine the position of the ball in the image and its size. Then we could use this information to determine the position of the ball relative to the robot dependend on the cameras position, angle and field of view. The position of the ball was then translated into movement instructions via a predetermined thresholding system. 
             </p>
-            <Image
+            <OptimizedImage
                 src="/assets/ball_detection_thresholds.jpg"
                 alt="visualization of the detection and threshold setting"
                 width={800}

@@ -1,4 +1,4 @@
-import Image from 'next/image';
+import OptimizedImage from '@/components/OptimizedImage';
 import React from 'react';
 import styles from '@/app/about/About.module.scss';
 import AboutSlideshow from './AboutSlideshow';
@@ -30,7 +30,7 @@ export default function AboutGridItem({ item }: AboutGridItemProps) {
             {item.images && item.images.length > 0 ? (
                 <AboutSlideshow images={item.images} />
             ) : item.image ? (
-                <Image
+                <OptimizedImage
                     src={item.image.src}
                     alt={item.image.alt}
                     width={item.image.width}

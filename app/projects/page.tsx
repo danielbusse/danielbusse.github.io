@@ -8,8 +8,9 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 import Timeline from '@/components/Timeline';
 import EditNote from "@/components/EditNote";
-import Image from 'next/image';
+import OptimizedImage from '@/components/OptimizedImage';
 import background6 from '../assets/background6.png';
+import background6Webp from '../assets/background6.webp';
 
 import styles from './Projects.module.scss';
 
@@ -40,10 +41,13 @@ export default function About() {
         <ReactLenis root options={lenisOptions} ref={lenisRef}>
             <div className={styles.main} ref={container}>
                 <div className={styles.background}>
-                    <Image
+                    <OptimizedImage
                         src={background6}
+                        webpSrc={background6Webp}
                         alt="Background"
                         placeholder="blur"
+                        loading="eager"
+                        fetchPriority="high"
                         fill
                         quality={100}
                         sizes="100vw"

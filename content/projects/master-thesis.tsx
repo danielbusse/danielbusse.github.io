@@ -1,5 +1,5 @@
 import Button from '@/components/Button';
-import Image from 'next/image';
+import OptimizedImage from '@/components/OptimizedImage';
 import styles from './master-thesis.module.scss';
 
 const thesisPdf = '/pdfs/Extended_Masterarbeit_Daniel-Busse_Telematik_2025_stylized.pdf';
@@ -36,14 +36,14 @@ export default function MasterThesisContent() {
             </p>
             <figure className={styles.sampleFigure}>
                 <div className={styles.sampleVisual}>
-                    <Image
+                    <OptimizedImage
                         src="/assets/master-thesis-example-000.png"
                         alt="Field image collected from a combine harvester"
                         fill
                         sizes="(max-width: 700px) 100vw, 70vw"
                         className={styles.sampleBase}
                     />
-                    <Image
+                    <OptimizedImage
                         src="/assets/master-thesis-example-001.png"
                         alt=""
                         aria-hidden="true"

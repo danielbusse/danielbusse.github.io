@@ -2,8 +2,9 @@
 
 import React from 'react';
 import { ReactLenis } from 'lenis/react';
-import Image from 'next/image';
+import OptimizedImage from '@/components/OptimizedImage';
 import background4 from '../../app/assets/background4.png';
+import background4Webp from '../../app/assets/background4.webp';
 import styles from './ArticleLayout.module.scss';
 
 interface ArticleLayoutProps {
@@ -16,10 +17,13 @@ export default function ArticleLayout({ children }: ArticleLayoutProps) {
         <ReactLenis root>
             <div className={styles.main}>
                 <div className={styles.background}>
-                    <Image
+                    <OptimizedImage
                         src={background4}
+                        webpSrc={background4Webp}
                         alt="Background"
                         placeholder="blur"
+                        loading="eager"
+                        fetchPriority="high"
                         fill
                         quality={100}
                         sizes="100vw"
